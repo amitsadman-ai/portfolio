@@ -1,0 +1,235 @@
+/* ==============================================
+   About page
+   ============================================== */
+.about {
+  padding: clamp(40px, 8vh, 80px) 0 clamp(48px, 8vw, 96px);
+}
+
+/* hide the global dotted background pattern while the About page is rendered
+   (the dots show on every other page, just not here) */
+body:has(.about) .bg-layer::after {
+  display: none;
+}
+
+/* ---------- Hero: photo + intro ---------- */
+.about__hero {
+  display: grid;
+  grid-template-columns: clamp(264px, 33.6vw, 432px) 1fr;
+  grid-template-rows: auto 1fr;
+  gap: clamp(28px, 5vw, 0px);
+  /* center the photo vertically with the text instead of sticking to the
+     top — keeps the face roughly at the level of the title and body */
+  align-items: center;
+  margin: 0 10px clamp(56px, 8vw, 96px) -10px;
+}
+.about__hero .about__title {
+  /* title spans both columns so it aligns left with "Experience" below */
+  grid-column: 1 / -1;
+  margin: 0 0 clamp(16px, 2.5vw, 28px);
+}
+
+.about__photo {
+  position: relative;
+  isolation: isolate;
+}
+.about__photo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  position: relative;
+  z-index: 1;
+  transform: translateX(-30px);
+}
+
+
+
+.about__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.about__title {
+  font-family: var(--font-headline);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+.about__text {
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: var(--c-text);
+  margin: 0;
+}
+
+/* ---------- Experience ---------- */
+.about__experience {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.about__section-title {
+  font-family: var(--font-headline);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.about__exp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 48px);
+}
+.about__exp-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: clamp(28px, 4vw, 48px);
+  border-bottom: 1px solid var(--c-primary-line);
+}
+.about__exp-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.about__exp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.about__exp-company-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.about__exp-company {
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 400;
+  color: var(--c-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+.about__exp-location {
+  font-size: 14px;
+  color: var(--c-text);
+  opacity: 0.7;
+  margin: 0;
+}
+.about__exp-dates {
+  font-size: 14px;
+  color: var(--c-text);
+  opacity: 0.7;
+  margin: 0;
+  white-space: nowrap;
+}
+.about__exp-title {
+  font-family: var(--font-script);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--c-primary);
+  margin: 4px 0 6px;
+}
+.about__exp-bullets {
+  list-style: disc;
+  margin: 4px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--c-text);
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.55;
+}
+.about__exp-bullets li::marker {
+  color: #fff5c1;
+}
+
+/* ---------- Skills marquee ---------- */
+.about__skills {
+  margin-top: clamp(64px, 7vw, 100px);
+}
+.about__skills-title {
+  font-family: var(--font-headline);
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.2;
+  margin: 0 0 clamp(20px, 2.5vw, 32px);
+  text-align: center;
+}
+/* the marquee container — breaks out of .container so the pill row
+   spans edge-to-edge, with overflow:hidden + edge fade mask */
+.about__skills-marquee {
+  margin-left: calc(-1 * clamp(20px, 4vw, 80px));
+  margin-right: calc(-1 * clamp(20px, 4vw, 80px));
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+.about__skills-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: about-skills-scroll 38s linear infinite;
+}
+@keyframes about-skills-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.about__skill {
+  flex: 0 0 auto;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: #fcf9e7;
+  color: var(--c-primary);
+  font-family: var(--font-script);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(45, 51, 89, 0.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .about__skills-track {
+    animation: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 820px) {
+  .about__hero {
+    grid-template-columns: 1fr;
+  }
+  .about__photo {
+    position: static;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}

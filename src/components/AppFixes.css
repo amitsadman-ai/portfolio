@@ -1,0 +1,220 @@
+.appfix {
+  margin-top: 40px;
+}
+
+/* ---- tabs ---- */
+.appfix__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.appfix__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--c-primary-line);
+  background: transparent;
+  color: var(--c-text);
+  font-size: var(--fs-body);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.appfix__tab img {
+  height: 20px;
+  width: auto;
+  max-width: 56px;
+  object-fit: contain;
+}
+.appfix__tab.is-active {
+  background: #fff5c1;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+/* ---- one app block ---- */
+/* per-app title — same eyebrow look as .app__label */
+.app__title {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--c-primary);
+}
+.app__subtitle {
+  margin-top: 12px;
+  max-width: 1000px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--c-text);
+  /* honor explicit \n line breaks inside a paragraph (used for the three
+     stacked questions in the BuyMe subtitle) */
+  white-space: pre-line;
+}
+.app__subtitle-bullet {
+  color: #fff5c1;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.app__block {
+  margin-top: 52px;
+}
+.app__label {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+}
+/* flow-name script subtitle under .app__label (e.g. "User Cancels Flow") */
+.app__flow-name {
+  font-family: var(--font-script);
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.1;
+  color: var(--c-primary);
+  margin: 0 0 16px;
+}
+
+/* second-flow standalone screenshot below the gallery */
+.app__flow2 {
+  margin-top: 40px;
+}
+.app__flow2 .app__flow-name {
+  margin-bottom: 20px;
+}
+.app__flow2-btn {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.app__flow2-btn:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 46px rgba(45, 51, 89, 0.18);
+}
+.app__flow2-img {
+  display: block;
+  height: 540px;
+  width: auto;
+  background: var(--c-white);
+}
+@media (max-width: 768px) {
+  .app__flow2-img {
+    height: 400px;
+  }
+}
+.app__text {
+  max-width: 820px;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--c-text);
+  /* honor explicit \n line breaks in the source string */
+  white-space: pre-line;
+}
+.app__text + .app__text {
+  margin-top: 14px;
+}
+
+/* ---- solution bullet list (newgift icon markers) ---- */
+.app__list {
+  list-style: none;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.app__list-item {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+/* the "Each category shows:" item wraps the nested list, so keep its icon
+   aligned to the heading line instead of the middle of the whole block */
+.app__list-item:has(.app__list--nested) {
+  align-items: flex-start;
+}
+.app__bullet {
+  flex: 0 0 auto;
+  height: 26px;
+  width: auto;
+}
+.app__list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.app__list--nested {
+  margin-top: 14px;
+  gap: 14px;
+}
+/* nested rows can wrap to multiple lines, so center the icon against the text */
+.app__list--nested .app__list-item {
+  align-items: center;
+}
+.app__list--nested .app__bullet {
+  height: 21px;
+}
+
+/* ---- "today" static row ---- */
+.app__today {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+.app__today-img {
+  flex: 0 0 auto;
+  height: 470px;
+  width: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 30px rgba(45, 51, 89, 0.1);
+}
+
+/* ---- CTA (mirrors homepage .card__cta) ---- */
+.app__cta {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 clamp(20px, 3vw, 28px);
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #fff5c1;
+  color: var(--c-text);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  transition: transform 0.2s ease;
+}
+.app__cta svg {
+  transition: transform 0.2s ease;
+}
+.app__cta:hover {
+  transform: translateY(-2px);
+  font-weight: 700;
+}
+.app__cta:hover svg {
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .app__today-img {
+    height: 380px;
+  }
+}

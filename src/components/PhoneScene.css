@@ -1,0 +1,152 @@
+/* ==============================================================
+   PhoneScene — tilted phone screens over a colored backdrop shape
+   ============================================================== */
+.phone-scene {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 3vw, 40px);
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 51, 89, 0.04) 0%,
+    rgba(45, 51, 89, 0.08) 100%
+  );
+  overflow: hidden;
+  margin-top: 8px;
+  isolation: isolate;
+}
+
+/* dotted texture covering the entire phone-scene section
+   (same dot pattern as the homepage) */
+.phone-scene__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--c-dot) 1.3px, transparent 1.3px);
+  background-size: 26px 26px;
+  background-position: center;
+  opacity: 0.9;
+}
+
+.phone-scene__phones {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-scene--2 .phone-scene__phones,
+.phone-scene--3 .phone-scene__phones {
+  /* phones are now separated with breathing room, no overlap */
+  gap: clamp(20px, 3vw, 56px);
+}
+.phone-scene--5 .phone-scene__phones {
+  /* tight gap so the 5-phone fan reads as a single group */
+  gap: clamp(-30px, -1vw, -10px);
+}
+
+.phone-scene__phone {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: zoom-in;
+  flex: 0 0 auto;
+  width: clamp(160px, 20vw, 260px);
+  filter: drop-shadow(0 18px 36px rgba(45, 51, 89, 0.22));
+}
+.phone-scene__phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 2-phone layout: gentle outward tilt */
+.phone-scene--2 .phone-scene__phone--0 {
+  transform: rotate(-7deg);
+}
+.phone-scene--2 .phone-scene__phone--1 {
+  transform: rotate(7deg);
+}
+
+/* 3-phone layout: center phone forward, side phones tilted out */
+.phone-scene--3 .phone-scene__phone--0 {
+  transform: rotate(-9deg);
+}
+.phone-scene--3 .phone-scene__phone--1 {
+  transform: translate(-40px, -8px);
+}
+.phone-scene--3 .phone-scene__phone--2 {
+  /* slightly bigger + nudged right, no tilt */
+  width: clamp(180px, 22vw, 290px);
+  transform: translateX(20px);
+}
+
+/* 5-phone fan: 3D perspective — side phones rotate around the Y-axis
+   so they appear to STAND UP and angle toward the center (like phones
+   standing on a shelf viewed from slightly in front). */
+.phone-scene--5 .phone-scene__phones {
+  perspective: 1400px;
+}
+.phone-scene--5 .phone-scene__phone {
+  width: clamp(140px, 16vw, 220px);
+  transform-style: preserve-3d;
+}
+/* Outer phones slide INWARD (translateX) so they physically overlap
+   the inner phones, sit at the highest z-index, and are bigger so
+   they read as the front-most layer of the stack. */
+.phone-scene--5 .phone-scene__phone--0 {
+  width: clamp(160px, 18vw, 240px);
+  transform: translate(50px, 10px) rotateY(35deg);
+  z-index: 5;
+}
+.phone-scene--5 .phone-scene__phone--1 {
+  transform: translateY(8px) rotateY(20deg);
+  z-index: 2;
+}
+.phone-scene--5 .phone-scene__phone--2 {
+  transform: translateY(6px);
+  z-index: 1; /* very back */
+}
+.phone-scene--5 .phone-scene__phone--3 {
+  transform: translateY(8px) rotateY(-20deg);
+  z-index: 2;
+}
+.phone-scene--5 .phone-scene__phone--4 {
+  width: clamp(160px, 18vw, 240px);
+  transform: translate(-50px, 10px) rotateY(-35deg);
+  z-index: 5;
+}
+
+.phone-scene__phone:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+  border-radius: 32px;
+}
+
+/* hand-drawn arrow image from /assets/arrow.png */
+.phone-scene__arrow {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  width: clamp(60px, 7vw, 100px);
+  height: auto;
+  top: calc(50% + 175px);
+  left: 50%;
+  transform: translateX(calc(-12% + 60px));
+  filter: drop-shadow(0 3px 6px rgba(45, 51, 89, 0.18));
+}
+
+@media (max-width: 600px) {
+  .phone-scene__phones {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+  .phone-scene--3 .phone-scene__phone,
+  .phone-scene--2 .phone-scene__phone {
+    transform: none !important;
+    width: 60% !important;
+  }
+}

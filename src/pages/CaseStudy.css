@@ -1,0 +1,463 @@
+/* full-bleed hero banner at the top of the case study —
+   aspect-ratio is the source 1800×1012 trimmed to ~70% height (1800×708) so the
+   center of the banner shows; object-fit: cover crops the top and bottom evenly */
+/* banner stays full-width; only the <img> inside pans */
+.cs__banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--banner-aspect, 1800 / 318);
+  overflow: hidden;
+}
+.cs__banner-img {
+  display: block;
+  width: calc(100% + var(--banner-shift, 100px));
+  max-width: none;
+  height: 100%;
+  margin-left: calc(-1 * var(--banner-shift, 100px));
+  object-fit: var(--banner-fit, cover);
+  object-position: center bottom;
+}
+
+.cs {
+  padding: clamp(40px, 8vh, 80px) 0 clamp(40px, 7vh, 72px);
+}
+
+.cs__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cs__back,
+.cs__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-body);
+  color: var(--c-primary);
+  transition: gap 0.2s ease;
+}
+.cs__back:hover {
+  gap: 12px;
+}
+.cs__next:hover {
+  gap: 12px;
+}
+
+.cs__tag {
+  display: inline-block;
+  font-size: var(--fs-tag);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--c-primary);
+  background: transparent;
+  border: 1px solid #2d3359;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.cs__title {
+  font-family: var(--font-headline);
+  font-size: clamp(26px, 4vw, 48px);
+  line-height: 1.12;
+  margin: 18px 0 16px;
+  /* honor explicit \n in the title string */
+  white-space: pre-line;
+}
+
+.cs__body {
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 400;
+  color: var(--c-text);
+}
+.cs__tagline {
+  font-family: var(--font-headline);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 700;
+  color: var(--c-primary);
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.cs__body + .cs__body {
+  margin-top: 1em;
+}
+
+/* "How it looks today" — 2-column grid with OoohBaby caption per image */
+.cs__today {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(10px, 1.2vw, 18px);
+  margin-top: 8px;
+  /* aligns left with the "How it looks today" label;
+     extend right to make screens bigger */
+  margin-right: calc(-1 * clamp(20px, 8vw, 200px));
+}
+.cs__today-item {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.cs__today-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  background: var(--c-white);
+}
+.cs__today-title {
+  font-family: var(--font-script);
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--c-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .cs__today-title {
+    white-space: normal;
+  }
+}
+@media (max-width: 600px) {
+  .cs__today {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* User research — circular portrait + quote, one card per persona */
+.app__block:has(.cs__research) {
+  margin-top: 80px;
+}
+.cs__research-num {
+  margin-right: 6px;
+}
+.cs__research {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(48px, 6vw, 80px);
+  margin-top: 18px;
+}
+.cs__research-card {
+  display: grid;
+  grid-template-columns: clamp(120px, 14vw, 170px) 1fr;
+  align-items: center;
+  gap: clamp(20px, 3vw, 36px);
+  color: #171a2d;
+}
+.cs__research-card .cs__research-name,
+.cs__research-card .cs__research-sep,
+.cs__research-card .cs__research-role,
+.cs__research-card .cs__research-exp,
+.cs__research-card .cs__research-exp-label,
+.cs__research-card .cs__research-quote {
+  color: #171a2d;
+  opacity: 1;
+}
+.cs__research-card .cs__research-sep {
+  opacity: 0.5;
+}
+.cs__research-portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--c-white);
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+}
+.cs__research-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cs__research-name {
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 1.9vw, 26px);
+  font-weight: 400;
+  color: var(--c-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+.cs__research-sep {
+  color: var(--c-primary);
+  opacity: 0.55;
+  margin: 0 4px;
+  font-weight: 400;
+}
+.cs__research-role {
+  font-weight: 400;
+  color: var(--c-text);
+}
+.cs__research-exp {
+  font-size: clamp(15px, 1.3vw, 17px);
+  color: var(--c-text);
+  margin: 0;
+}
+.cs__research-exp-label {
+  font-weight: 400;
+  color: var(--c-primary);
+}
+.cs__research-quote {
+  font-size: clamp(15px, 1.3vw, 17px);
+  font-style: italic;
+  color: var(--c-text);
+  line-height: 1.55;
+  margin: 4px 0 0;
+  padding-left: 14px;
+  border-left: 3px solid #fcf9e7;
+  white-space: pre-line;
+}
+@media (max-width: 640px) {
+  .cs__research-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+  .cs__research-portrait {
+    width: 130px;
+  }
+  .cs__research-quote {
+    border-left: none;
+    padding-left: 0;
+    text-align: left;
+  }
+}
+
+.cs__logos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px 0;
+}
+.cs__logo {
+  height: 50px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+/* Dotted-pattern scene wrapper for the gallery layout (matches the navy
+   dotted background used by PhoneScene / PhoneRow so a gallery inside a
+   new-screens section reads as part of the same visual family) */
+.cs__dotted-scene {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 51, 89, 0.04) 0%,
+    rgba(45, 51, 89, 0.08) 100%
+  );
+  padding: clamp(28px, 4vw, 52px) 0;
+  overflow: hidden;
+  isolation: isolate;
+  margin-top: 8px;
+}
+.cs__dotted-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(var(--c-dot) 1.3px, transparent 1.3px);
+  background-size: 26px 26px;
+  background-position: center;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.cs__dotted-scene > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* "New screens" with named sub-sections (e.g. IAA) */
+.cs__new-screens {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 6vw, 80px);
+  margin-top: 18px;
+}
+.cs__new-screens-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cs__new-screens-title {
+  font-family: var(--font-headline);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 400;
+  color: #171a2d;
+  margin: 0;
+  line-height: 1.2;
+}
+.cs__new-screens-desc {
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.55;
+  color: var(--c-text);
+  margin: 0;
+}
+/* widen the text container so a long single-paragraph block (e.g. the
+   IAA solution) fits on 2 lines instead of wrapping to 3 */
+.app__block--wide-text .app__text {
+  max-width: 100%;
+}
+
+/* pull-quote / tagline that sits just under a sub-section title */
+.cs__new-screens-tagline {
+  font-size: clamp(15px, 1.3vw, 17px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--c-text);
+  margin: 0;
+  position: relative;
+  padding-left: 18px;
+  border-left: 3px solid #fcf1b5;
+}
+
+.cs__new-screens-subhead {
+  font-family: var(--font-script);
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 400;
+  color: var(--c-primary);
+  margin: 8px 0 0;
+  line-height: 1.1;
+}
+
+/* Pill tabs (e.g. "Request shifts" / "Exchange shift" under a section title) */
+.cs__tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: rgba(45, 51, 89, 0.08);
+  border-radius: 999px;
+  padding: 4px;
+  width: fit-content;
+  margin: 0;
+}
+.cs__tab {
+  background: transparent;
+  border: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--c-primary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, font-weight 0.2s ease;
+  white-space: nowrap;
+}
+.cs__tab:hover {
+  background: rgba(45, 51, 89, 0.06);
+}
+.cs__tab.is-active {
+  background: #fff5c1;
+  color: var(--c-primary);
+  /* 600 = HelveticaNeueMedium in the font-face map; 500 silently fell
+     back to 400 because no weight is registered for it */
+  font-weight: 600;
+}
+.cs__tab.is-active:hover {
+  background: #fff5c1;
+}
+
+/* Hebrew → English glossary block (sits under the description) */
+.cs__glossary {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cs__glossary-row {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: clamp(14px, 1.1vw, 16px);
+  color: var(--c-text);
+}
+.cs__glossary-arrow {
+  color: var(--c-primary);
+  opacity: 0.45;
+  font-weight: 600;
+}
+.cs__glossary-abbr,
+.cs__glossary-full {
+  /* Hebrew text — render right-to-left within its own span */
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-weight: 600;
+  color: var(--c-primary);
+}
+.cs__glossary-english {
+  font-weight: 600;
+  color: var(--c-primary);
+}
+
+/* full-width "Next up" band at the bottom of every case study */
+.cs__next-band {
+  display: block;
+  width: 100%;
+  height: 70px;
+  margin-top: clamp(48px, 8vw, 88px);
+  background: #fcf9e7;
+  color: var(--c-text);
+}
+/* when the band is present, sit it flush against the footer (the footer's
+   default 80px top margin would otherwise leave a gap below the band) */
+main:has(.cs__next-band) + footer {
+  margin-top: 0;
+}
+.cs__next-band-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  height: 100%;
+}
+.cs__next-label {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  line-height: 1.1;
+  color: var(--c-text);
+  flex: 0 0 auto;
+}
+.cs__next-project {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--c-primary);
+  text-align: right;
+  max-width: 60%;
+  transition: gap 0.2s ease;
+}
+.cs__next-band:hover .cs__next-project {
+  gap: 18px;
+}
+
+@media (max-width: 640px) {
+  .cs__next-band-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .cs__next-project {
+    max-width: 100%;
+    text-align: left;
+  }
+}
+
+.cs--missing {
+  text-align: center;
+}
+.cs--missing .cs__back {
+  justify-content: center;
+}

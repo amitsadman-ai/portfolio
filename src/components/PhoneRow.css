@@ -1,0 +1,73 @@
+/* ==========================================================
+   PhoneRow — clean side-by-side phones on a cream-yellow strip
+   ========================================================== */
+.phone-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 3vw, 40px);
+  border-radius: 24px;
+  /* same soft navy gradient as the .phone-scene above */
+  background: linear-gradient(
+    180deg,
+    rgba(45, 51, 89, 0.04) 0%,
+    rgba(45, 51, 89, 0.08) 100%
+  );
+  margin-top: 8px;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* same dotted texture as PhoneScene's backdrop */
+.phone-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(var(--c-dot) 1.3px, transparent 1.3px);
+  background-size: 26px 26px;
+  background-position: center;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.phone-row__phones {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: clamp(24px, 4vw, 80px);
+  width: 100%;
+  max-width: 1000px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.phone-row__phone {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: zoom-in;
+  flex: 1 1 0;
+  max-width: 280px;
+  filter: drop-shadow(0 18px 32px rgba(45, 51, 89, 0.18));
+}
+.phone-row__phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.phone-row__phone:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+  border-radius: 32px;
+}
+
+@media (max-width: 640px) {
+  .phone-row__phones {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .phone-row__phone {
+    width: 70%;
+    max-width: 260px;
+  }
+}

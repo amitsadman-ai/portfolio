@@ -1,0 +1,88 @@
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'Young Serif';
+  src: url('/fonts/YoungSerif-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Oooh Baby';
+  src: url('/fonts/OoohBaby-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Neue 5';
+  src: url('/fonts/HelveticaNeueLight.otf') format('opentype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Neue 5';
+  src: url('/fonts/HelveticaNeueRoman.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Neue 5';
+  src: url('/fonts/HelveticaNeueMedium.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Neue 5';
+  src: url('/fonts/HelveticaNeueBold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Neue 5';
+  src: url('/fonts/HelveticaNeueHeavy.otf') format('opentype');
+  font-weight: 800;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Colors ---------- */
+  --c-primary: #2d3359;
+  --c-blue: #b0cbe8;
+  --c-yellow: #fcf1b5;
+  --c-cream: #fcf9e7;
+  --c-text: #171a2d;
+  --c-white: #ffffff;
+
+  /* Derived / utility */
+  --c-primary-soft: rgba(45, 51, 89, 0.08);
+  --c-primary-line: rgba(45, 51, 89, 0.12);
+  --c-dot: rgba(45, 51, 89, 0.18);
+
+  /* ---------- Fonts ---------- */
+  --font-headline: 'Young Serif', Georgia, serif;
+  --font-body: 'Helvetica Neue 5', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-script: 'Oooh Baby', cursive;
+
+  /* ---------- Type scale (desktop) ---------- */
+  --fs-hero: clamp(40px, 6vw, 72px);
+  --fs-headline: 32px;
+  --lh-headline: 40px;
+  --fs-title-lg: 20px;
+  --fs-body: 16px;
+  --fs-tag: 14px;
+
+  /* ---------- Layout ---------- */
+  --header-h: 76px;
+  --maxw: 1160px;
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-headline: 20px;
+    --lh-headline: 32px;
+    --fs-title-lg: 16px;
+    --fs-body: 15px;
+    --fs-tag: 13px;
+    --header-h: 64px;
+  }
+}

@@ -1,0 +1,376 @@
+/* Decorative moodboard combining the portfolio palette + the reference imagery:
+   - solid cream-yellow blob + small navy disc + navy dotted quarter-arc
+   - three concentric orbital rings (faint, with a soft glow filter)
+   - cards arranged around the orbit and gently floating up/down */
+
+.moodboard {
+  position: relative;
+  margin-top: 32px;
+  padding: 40px 0 48px;
+  min-height: 720px;
+}
+
+/* ---------- decoration layer ---------- */
+
+/* solid cream blob (portfolio yellow) */
+.moodboard__pink {
+  position: absolute;
+  z-index: 0;
+  left: 60px;
+  top: 130px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: #fcf1b5;
+  pointer-events: none;
+}
+
+/* floating circular portrait bubbles (3 of them) — drop-in replaceable by
+   overwriting public/assets/portrait-1.svg / portrait-2.svg / portrait-3.svg */
+.moodboard__portrait {
+  position: absolute;
+  z-index: 2;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--c-white);
+  box-shadow: 0 12px 28px rgba(45, 51, 89, 0.18),
+    inset 0 0 0 3px #fff;
+  border: 3px solid #fff;
+  pointer-events: none;
+}
+/* upper-right (where the navy disc used to live) */
+.moodboard__portrait--1 {
+  right: 6%;
+  top: 248px;
+  width: 80px;
+  height: 80px;
+}
+/* Gali — between the Slack secondary card and the Gmail card */
+.moodboard__portrait--2 {
+  left: calc(20% - 8px);
+  bottom: 280px;
+  width: 86px;
+  height: 86px;
+  transform: rotate(-4deg);
+}
+/* to the right of the Slack image (upper-middle) */
+.moodboard__portrait--3 {
+  left: 42%;
+  top: 110px;
+  width: 78px;
+  height: 78px;
+  transform: rotate(3deg);
+}
+
+/* dotted quarter-arc, right side — navy dots in a tight grid masked into a soft quarter circle */
+.moodboard__dots {
+  position: absolute;
+  z-index: 0;
+  right: calc(16% - 80px);
+  top: 130px;
+  width: 240px;
+  height: 240px;
+  background-image: radial-gradient(var(--c-primary) 1.8px, transparent 2.2px);
+  background-size: 14px 14px;
+  background-position: 0 0;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(
+    circle at 100% 0%,
+    #000 0%,
+    #000 60%,
+    transparent 85%
+  );
+  mask-image: radial-gradient(
+    circle at 100% 0%,
+    #000 0%,
+    #000 60%,
+    transparent 85%
+  );
+  pointer-events: none;
+}
+
+/* three concentric orbital rings — comet-tail gradient strokes; outer + inner
+   drift slowly in opposite directions, middle stays still */
+.moodboard__orbit {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 560px;
+  height: 560px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(176, 203, 232, 0.35));
+}
+.moodboard__orbit-ring {
+  fill: none;
+  stroke-linecap: round;
+}
+.moodboard__orbit-ring--outer {
+  stroke: #171a2d;
+  stroke-width: 2.5;
+}
+.moodboard__orbit-ring--mid {
+  stroke: #171a2d;
+  stroke-width: 2;
+  stroke-dasharray: 16 20;
+}
+.moodboard__orbit-ring--inner {
+  stroke: url(#moodboard-orbit-inner);
+  stroke-width: 2;
+}
+
+/* outer + inner drift slowly, opposite directions; middle stays still */
+.moodboard__orbit-group {
+  transform-origin: 400px 400px;
+}
+.moodboard__orbit-group--outer {
+  animation: moodboard-orbit-cw 90s linear infinite;
+}
+.moodboard__orbit-group--inner {
+  animation: moodboard-orbit-ccw 70s linear infinite;
+}
+@keyframes moodboard-orbit-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes moodboard-orbit-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .moodboard__orbit-group {
+    animation: none;
+  }
+}
+
+/* ---------- platform cards stage ---------- */
+
+.moodboard__stage {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  height: 720px;
+}
+
+.moodboard__card {
+  position: absolute;
+  width: 22%;
+  min-width: 200px;
+  max-width: 260px;
+}
+
+/* the card-inner is what we animate (translateY); the parent .moodboard__card
+   only handles the rotation, so transform doesn't fight with the animation */
+.moodboard__card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: moodboard-float 6.5s ease-in-out infinite;
+}
+
+@keyframes moodboard-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Per-card placement + rotation (parent) and animation delay (inner) */
+.moodboard__card--1 { /* Slack — upper-left, shifted right with the blob */
+  left: 15%;
+  top: 24px;
+  transform: rotate(-3deg);
+}
+.moodboard__card--1 .moodboard__card-inner { animation-delay: 0s; animation-duration: 6.5s; }
+
+.moodboard__card--2 { /* Telegram — upper-right */
+  right: 17%;
+  top: 0;
+  transform: rotate(2deg);
+}
+.moodboard__card--2 .moodboard__card-inner { animation-delay: -1.5s; animation-duration: 7.5s; }
+
+.moodboard__card--3 { /* Gmail — lower-left, bigger */
+  left: 28%;
+  bottom: 80px;
+  width: 28%;
+  max-width: 320px;
+  transform: rotate(2deg);
+}
+.moodboard__card--3 .moodboard__card-inner { animation-delay: -2.8s; animation-duration: 8s; }
+
+.moodboard__card--4 { /* iMessage — lower-right, smaller */
+  right: 8%;
+  bottom: 0;
+  transform: rotate(-2deg);
+  max-width: 180px;
+  width: 16%;
+  min-width: 150px;
+}
+.moodboard__card--4 .moodboard__card-inner { animation-delay: -4s; animation-duration: 7s; }
+
+.moodboard__card-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  align-self: flex-start;
+  box-shadow: 0 6px 18px rgba(45, 51, 89, 0.1);
+}
+.moodboard__logo {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.moodboard__name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-primary);
+}
+
+/* shot wrappers + buttons */
+.moodboard__shot-wrap {
+  position: relative;
+  width: 100%;
+}
+.moodboard__shot-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 18px 44px rgba(45, 51, 89, 0.18);
+}
+.moodboard__shot-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 52px rgba(45, 51, 89, 0.22);
+}
+.moodboard__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--c-white);
+}
+
+/* Slack twin-shot stack — secondary sits BELOW the primary on the left
+   (full clearance, no overlap with the primary card behind it) */
+.moodboard__shot-wrap--stack {
+  padding-bottom: 160px;
+  padding-left: 12px;
+}
+.moodboard__shot-wrap--stack .moodboard__shot-btn--secondary {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 55%;
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(45, 51, 89, 0.22);
+}
+
+/* Slack screenshots only — tighter 8px corner radius */
+.moodboard__card--1 .moodboard__shot-btn {
+  border-radius: 8px;
+}
+
+/* iMessage screenshot only — image now has transparent BG, so drop the white
+   fill and the rectangular box-shadow; rely on the phone frame in the image. */
+.moodboard__card--4 .moodboard__shot-btn {
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: none;
+}
+.moodboard__card--4 .moodboard__shot-btn:hover {
+  box-shadow: none;
+}
+.moodboard__card--4 .moodboard__shot {
+  background: transparent;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .moodboard {
+    min-height: auto;
+    padding: 16px 0;
+  }
+  .moodboard__stage {
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .moodboard__card,
+  .moodboard__card--1,
+  .moodboard__card--2,
+  .moodboard__card--3,
+  .moodboard__card--4 {
+    position: relative;
+    inset: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+  }
+  .moodboard__orbit {
+    width: 560px;
+    height: 560px;
+  }
+  .moodboard__pink {
+    left: -160px;
+    top: 60px;
+    width: 320px;
+    height: 320px;
+  }
+  .moodboard__teal {
+    right: 8%;
+    top: 16px;
+  }
+  .moodboard__dots {
+    right: -10px;
+    top: 80px;
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 600px) {
+  .moodboard__stage {
+    grid-template-columns: 1fr;
+  }
+  .moodboard__orbit {
+    width: 380px;
+    height: 380px;
+  }
+  .moodboard__pink {
+    width: 240px;
+    height: 240px;
+    left: -100px;
+  }
+  .moodboard__teal {
+    width: 44px;
+    height: 44px;
+  }
+  .moodboard__dots {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moodboard__card-inner {
+    animation: none;
+  }
+  .moodboard__shot-btn {
+    transition: none;
+  }
+}

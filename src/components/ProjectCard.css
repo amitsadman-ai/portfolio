@@ -1,0 +1,145 @@
+.card {
+  position: relative;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--c-primary-line);
+  border-radius: var(--radius);
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 24px 60px rgba(45, 51, 89, 0.12);
+  transition: box-shadow 0.3s ease;
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+.card:hover {
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 30px 72px rgba(45, 51, 89, 0.18);
+}
+
+.card__tag {
+  display: inline-block;
+  font-size: var(--fs-tag);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--c-text);
+  background: transparent;
+  border: 1px solid #2d3359;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.card__logos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 24px;
+  min-height: 48px;
+}
+/* IAA card: tighter logo-row bottom margin */
+.card[href="/work/israel-airports-authority"] .card__logos {
+  margin-bottom: 16px;
+}
+
+/* Oddity card: let the body fill the column so "in the US." packs onto the
+   previous line instead of sitting alone as a widow */
+.card[href="/work/oddity"] .card__body {
+  max-width: none;
+}
+
+.card__logo {
+  height: 48px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
+}
+
+/* Oddity card: align the ODDITY and IL MAKIAGE wordmark caps to each other
+   (ODDITY has a bolt above its caps; IL MAKIAGE has "NEW YORK" below) */
+.card[href="/work/oddity"] .card__logo[alt="Oddity"] {
+  height: 44px;
+  transform: translateY(-8px);
+}
+.card[href="/work/oddity"] .card__logo[alt="IL Makiage"] {
+  height: 44px;
+  transform: translateY(5px);
+}
+
+.card__title {
+  font-family: var(--font-headline);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  color: var(--c-text);
+}
+
+.card__body {
+  margin-top: 14px;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  color: var(--c-text);
+  max-width: 48ch;
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: #fff5c1;
+  color: var(--c-text);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  transition: transform 0.2s ease;
+}
+.card__cta svg {
+  transition: transform 0.2s ease;
+}
+.card__cta:hover {
+  transform: translateY(-2px);
+  font-weight: 700;
+}
+.card__cta:hover svg {
+  transform: translateX(3px);
+}
+
+.card__media {
+  width: 100%;
+}
+.card__image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  object-fit: contain;
+}
+
+/* Alternate image side for rhythm while keeping spec's image-right default */
+.work__item:nth-child(even) .card__text {
+  order: 2;
+}
+.work__item:nth-child(even) .card__media {
+  order: 1;
+}
+
+@media (max-width: 860px) {
+  .card {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .card__text,
+  .work__item:nth-child(even) .card__text {
+    order: 1;
+  }
+  .card__media,
+  .work__item:nth-child(even) .card__media {
+    order: 2;
+  }
+}

@@ -1,0 +1,75 @@
+# ============================================================
+# Build artifacts (Vercel/Netlify will regenerate these)
+# ============================================================
+node_modules/
+dist/
+.vite/
+*.local
+
+# ============================================================
+# OS / editor / tooling
+# ============================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/
+*.swp
+*.tmp
+
+# ============================================================
+# Env / secrets
+# ============================================================
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# ============================================================
+# Logs
+# ============================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================================
+# Python helper scripts' caches (image processing)
+# ============================================================
+__pycache__/
+*.pyc
+
+# ============================================================
+# Raw working files at the project root
+# (only files inside src/, public/, etc. should be tracked —
+#  everything below is original/source media that was used
+#  to generate the optimized assets in public/assets/)
+# ============================================================
+
+# Image source files at the repo root only (NOT recursively —
+# we still want images inside public/ and src/ tracked)
+/*.png
+/*.PNG
+/*.jpg
+/*.JPG
+/*.jpeg
+/*.JPEG
+/*.heic
+/*.HEIC
+/*.webp
+/*.WEBP
+/*.svg
+/*.psd
+/*.ai
+/*.sketch
+/*.fig
+/*.gif
+/*.bmp
+/*.tiff
+
+# Raw working folders at the repo root
+/IAA/
+/BuyMe App/
+/Scouts system/
+/fonts/
+/💡 UX/

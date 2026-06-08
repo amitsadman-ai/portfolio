@@ -1,0 +1,22 @@
+.typewriter__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  background: currentColor;
+  vertical-align: -0.15em;
+  animation: typewriter-blink 0.9s steps(2, start) infinite;
+}
+.typewriter__cursor--done {
+  display: none;
+}
+@keyframes typewriter-blink {
+  to {
+    visibility: hidden;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typewriter__cursor {
+    display: none;
+  }
+}

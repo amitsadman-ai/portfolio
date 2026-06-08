@@ -1,0 +1,53 @@
+.quote {
+  padding: clamp(40px, 7vh, 88px) 0;
+}
+
+.quote__inner {
+  position: relative;
+  /* match the project cards' receded (scaled) width so their edges line up */
+  width: 94%;
+  margin-inline: auto;
+  text-align: center;
+  padding: clamp(56px, 8vw, 104px) clamp(28px, 5vw, 64px);
+  border-radius: var(--radius);
+  background: radial-gradient(82% 130% at 50% 50%, #fcf1b5 0%, #fdf5cf 55%, #fcf9e7 100%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* dashed white guide lines + dots at the intersections */
+.quote__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, #fff 2.5px, transparent 3px),
+    radial-gradient(circle, #fff 2.5px, transparent 3px),
+    radial-gradient(circle, #fff 2.5px, transparent 3px),
+    radial-gradient(circle, #fff 2.5px, transparent 3px),
+    repeating-linear-gradient(180deg, #fff 0 5px, transparent 5px 12px),
+    repeating-linear-gradient(180deg, #fff 0 5px, transparent 5px 12px),
+    repeating-linear-gradient(90deg, #fff 0 5px, transparent 5px 12px),
+    repeating-linear-gradient(90deg, #fff 0 5px, transparent 5px 12px);
+  background-size:
+    11px 11px, 11px 11px, 11px 11px, 11px 11px,
+    1.5px 100%, 1.5px 100%, 100% 1.5px, 100% 1.5px;
+  background-position:
+    16% 24%, 84% 24%, 16% 72%, 84% 72%,
+    16% 0, 84% 0, 0 24%, 0 72%;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+}
+
+.quote__text {
+  position: relative;
+  z-index: 3;
+  max-width: 24ch;
+  margin: 0 auto;
+  font-family: var(--font-headline);
+  font-size: clamp(26px, 3.2vw, 36px);
+  line-height: 1.28;
+  color: var(--c-text);
+  text-wrap: balance;
+}

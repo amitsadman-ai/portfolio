@@ -1,0 +1,299 @@
+/* ===========================================================
+   Questionnaire Analysis dashboard — KPI strip
+   4 white cards in a row; donut + legend / hero %; animated.
+   =========================================================== */
+
+/* ---------- section title ---------- */
+.dq__title-wrap {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0 0 28px;
+}
+.dq__title-label {
+  /* uses .app__label (THE PROBLEM) base — keep its tracking + caps */
+  margin: 0;
+}
+.dq__title-subtitle {
+  /* matches Questionnaire Analysis (the .app__label style),
+     just dimmer so the section title leads */
+  opacity: 0.55;
+  text-transform: none;
+}
+
+/* ---------- grid ----------
+   3 cards in one row, all equal ~33% width on the 6-col base. */
+.dq__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(16px, 1.6vw, 24px);
+  align-items: stretch;
+}
+.dq__item--donut {
+  grid-column: span 2;
+}
+/* Q1 only — its question is the longest in the set, so cap its font
+   slightly smaller so it wraps to 2 lines at the standard card width.
+   Q2's font stays at its original clamp. */
+.dq__item--donut:first-child .dq__q-text {
+  font-size: clamp(12px, 1vw, 14px);
+}
+
+.dq__item {
+  display: flex;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.dq__item.is-in {
+  opacity: 1;
+  transform: none;
+}
+/* cards arrive one at a time as the dashboard enters view */
+.dq__item:nth-child(1) { transition-delay: 0s; }
+.dq__item:nth-child(2) { transition-delay: 180ms; }
+.dq__item:nth-child(3) { transition-delay: 360ms; }
+.dq__item:nth-child(4) { transition-delay: 540ms; }
+
+/* ---------- card ---------- */
+.dq__card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px;
+  background: var(--c-white);
+  border: 1px solid var(--c-primary-line);
+  border-radius: var(--radius, 20px);
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.dq__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(45, 51, 89, 0.18);
+}
+
+/* ---------- card title (was card head) ---------- */
+.dq__q-text {
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--c-text);
+  margin: 0;
+  /* reserve 2 lines so short questions don't shrink their card body;
+     long questions wrap freely and the grid stretches the row to match */
+  min-height: calc(2 * 1.4em);
+}
+
+/* ---------- highlight (cream brush stroke) ----------
+   Hand-crafted SVG brush: slightly tilted, jagged irregular edges, plus
+   internal streaky highlights to mimic dry-brush bristle texture. */
+.dq__highlight {
+  font-weight: 600;
+  color: var(--c-primary);
+  padding: 5px 14px 4px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 46' preserveAspectRatio='none'><path d='M3,30 L11,22 L24,24 L40,20 L58,22 L80,18 L102,21 L124,18 L146,21 L168,17 L190,19 L212,16 L234,18 L256,15 L278,17 L294,18 L298,24 L296,30 L280,33 L256,31 L234,33 L212,30 L190,32 L168,30 L146,33 L124,30 L102,33 L80,31 L58,33 L40,30 L24,32 L10,30 Z' fill='%23fcf1b5'/><g stroke='%23fff8d8' stroke-width='1.3' stroke-linecap='round' opacity='0.7'><line x1='28' y1='22' x2='86' y2='19'/><line x1='98' y1='21' x2='158' y2='17'/><line x1='168' y1='19' x2='238' y2='15'/><line x1='248' y1='16' x2='292' y2='14'/></g><g stroke='%23fff8d8' stroke-width='1.1' stroke-linecap='round' opacity='0.5'><line x1='20' y1='30' x2='80' y2='32'/><line x1='98' y1='31' x2='178' y2='32'/><line x1='198' y1='30' x2='268' y2='31'/></g><g stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' opacity='0.6'><line x1='48' y1='24' x2='78' y2='23'/><line x1='126' y1='27' x2='162' y2='26'/><line x1='206' y1='22' x2='240' y2='21'/></g></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* ---------- card body ---------- */
+.dq__card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* sit tight under the title — when this card stretches to match a
+     taller sibling, the extra space goes to the BOTTOM, not above the donut */
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+/* ---------- donut ---------- */
+.dq__donut-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.dq__donut {
+  /* viewBox is 260 wide with 30px outer margin for the floating % chips —
+     CSS width pushed higher so the visible ring reads ~200px+ */
+  width: clamp(240px, 100%, 320px);
+  height: auto;
+  /* subtle continuous breath so the donut feels alive after the
+     load sweep finishes. Stroke transitions still drive the arc draw-in. */
+  animation: dq-donut-breathe 5.5s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes dq-donut-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dq__donut {
+    animation: none;
+  }
+}
+.dq__donut-chips > g {
+  filter: drop-shadow(0 3px 8px rgba(45, 51, 89, 0.25));
+}
+/* gentle float — each chip's animation-delay is set inline per-key
+   so neighbors bob out of phase with each other */
+.dq__donut-chip-float {
+  animation: dq-chip-float 3.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes dq-chip-float {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dq__donut-chip-float {
+    animation: none;
+  }
+}
+
+/* ---------- horizontal legend ----------
+   Compact dot+label only — percentages live on the donut chips now.
+   Left-aligned with the question text. */
+.dq__legend--below {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 6px 14px;
+}
+.dq__legend--below .dq__legend-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--c-primary);
+}
+.dq__legend--below .dq__legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  /* dot keeps its full per-segment color — no opacity dimming */
+}
+.dq__legend--below .dq__legend-label {
+  font-weight: 600;
+  opacity: 0.75;
+}
+/* ---------- percent (hero number) ---------- */
+.dq__percent {
+  font-family: var(--font-headline);
+  font-size: clamp(44px, 5vw, 64px);
+  font-weight: 700;
+  color: var(--c-primary);
+  letter-spacing: -0.01em;
+  margin: 8px 0 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+}
+.dq__percent-suffix {
+  font-size: 0.55em;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+.dq__percent-caption {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-text);
+  margin: 0;
+  text-align: center;
+}
+
+/* ---------- combined percent-pair card ----------
+   Both stats stacked vertically inside ONE card (~33% wide).
+   Q3 on top, divider, Q4 below. Per cell: question on top, big % below. */
+.dq__item--percents {
+  grid-column: span 2;
+}
+.dq__item--percents .dq__card {
+  gap: 0;
+}
+.dq__percent-pair {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.dq__percent-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 clamp(8px, 1vw, 12px);
+}
+.dq__percent-cell-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+/* horizontal divider between the two stacked stats */
+.dq__percent-cell + .dq__percent-cell {
+  border-top: 1px solid var(--c-primary-line);
+  padding-top: clamp(14px, 1.8vw, 20px);
+  margin-top: clamp(8px, 1vw, 12px);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .dq__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* donuts split row 1 (50/50); combined card fills row 2 */
+  .dq__item--donut {
+    grid-column: span 2;
+  }
+  .dq__item--percents {
+    grid-column: span 4;
+  }
+}
+@media (max-width: 600px) {
+  .dq__grid {
+    grid-template-columns: 1fr;
+  }
+  .dq__item--donut,
+  .dq__item--percents {
+    grid-column: span 1;
+  }
+}
+
+/* ---------- motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dq__item,
+  .dq__card,
+  .dq__donut circle {
+    transition: none !important;
+    animation: none !important;
+  }
+  .dq__item {
+    opacity: 1;
+    transform: none;
+  }
+}
