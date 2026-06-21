@@ -21,6 +21,25 @@
   box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
     0 30px 72px rgba(45, 51, 89, 0.18);
 }
+.card--disabled {
+  cursor: default;
+}
+.card--disabled:hover {
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 24px 60px rgba(45, 51, 89, 0.12);
+}
+.card--disabled .card__cta {
+  font-family: 'Oooh Baby', cursive;
+  font-style: normal;
+  font-size: 1.25rem;
+  color: var(--c-text);
+  background: rgba(221, 221, 221, 0.8);
+}
+.card--disabled .card__cta:hover {
+  color: var(--c-text);
+  transform: none;
+  font-weight: 400;
+}
 
 .card__tag {
   display: inline-block;
@@ -63,11 +82,13 @@
 
 /* Oddity card: align the ODDITY and IL MAKIAGE wordmark caps to each other
    (ODDITY has a bolt above its caps; IL MAKIAGE has "NEW YORK" below) */
-.card[href="/work/oddity"] .card__logo[alt="Oddity"] {
+.card[href="/work/oddity"] .card__logo[alt="Oddity"],
+.card--disabled .card__logo[alt="Oddity"] {
   height: 44px;
   transform: translateY(-8px);
 }
-.card[href="/work/oddity"] .card__logo[alt="IL Makiage"] {
+.card[href="/work/oddity"] .card__logo[alt="IL Makiage"],
+.card--disabled .card__logo[alt="IL Makiage"] {
   height: 44px;
   transform: translateY(5px);
 }

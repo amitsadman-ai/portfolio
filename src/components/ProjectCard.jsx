@@ -4,12 +4,12 @@ import { ImagePlaceholder, LogoPlaceholder } from './Placeholder'
 import './ProjectCard.css'
 
 export default function ProjectCard({ project, index }) {
-  const { slug, tag, logos, image, title, cardTitle, body } = project
+  const { slug, tag, logos, image, title, cardTitle, body, comingSoon } = project
   // homepage card can show a shorter/punchier title than the case study page
   const headline = cardTitle || title
 
-  return (
-    <Link className="card" to={`/work/${slug}`} style={{ '--i': index }}>
+  const inner = (
+    <>
       <div className="card__text">
         <span className="card__tag">{tag}</span>
 
@@ -27,8 +27,8 @@ export default function ProjectCard({ project, index }) {
         <p className="card__body">{body}</p>
 
         <span className="card__cta">
-          Read more
-          <ArrowRight size={18} />
+          {comingSoon ? 'Coming soon..' : 'Read more'}
+          {!comingSoon && <ArrowRight size={18} />}
         </span>
       </div>
 
@@ -39,6 +39,24 @@ export default function ProjectCard({ project, index }) {
           <ImagePlaceholder label={tag} />
         )}
       </div>
+    </>
+  )
+
+  if (comingSoon) {
+    return (
+      <div
+        className="card card--disabled"
+        style={{ '--i': index }}
+        aria-disabled="true"
+      >
+        {inner}
+      </div>
+    )
+  }
+
+  return (
+    <Link className="card" to={`/work/${slug}`} style={{ '--i': index }}>
+      {inner}
     </Link>
   )
 }

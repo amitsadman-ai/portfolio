@@ -1,0 +1,59 @@
+/* The rain container is anchored to the bottom edge of the title (via
+ * its parent .hero__pile-zone) and extends UPWARD past the hero so
+ * pistachios appear to fall from above the viewport. It does not take
+ * any vertical space in its parent — the pile zone is `height: 0` so
+ * the subtitle stays snug against the title. */
+.pistachio-rain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -560px;
+  /* Push the rain container's bottom edge DOWN past the pile zone so
+   * the pile extends below the title instead of overlapping it. The
+   * offset is the pile peak (40px) minus a 10px upward nudge so the
+   * pile sits 10px higher in the layout. */
+  bottom: -30px;
+  pointer-events: none;
+  z-index: 0;
+  /* Hold the resting pile briefly, then fade it out. Last pistachio
+   * lands ≈ 2.7s in; vanish starts shortly after (≈ 3.0s) and lasts 1s. */
+  animation: pistachio-rain-vanish 1s ease-out 3.0s both;
+}
+
+.pistachio-rain__item {
+  position: absolute;
+  left: var(--x);
+  bottom: 100%;
+  transform: translateX(-50%) rotate(0deg);
+  opacity: 0;
+  animation: pistachio-rain-fall var(--duration) cubic-bezier(0.42, 0, 0.7, 1) var(--delay) both;
+  will-change: bottom, transform, opacity;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes pistachio-rain-fall {
+  0% {
+    bottom: 100%;
+    transform: translateX(-50%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    bottom: var(--final-bottom);
+    transform: translateX(-50%) rotate(var(--rotation));
+    opacity: 1;
+  }
+}
+
+@keyframes pistachio-rain-vanish {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pistachio-rain {
+    display: none;
+  }
+}

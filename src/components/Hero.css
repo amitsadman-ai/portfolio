@@ -1,8 +1,12 @@
 .hero {
+  position: relative;
   padding: clamp(56px, 12vh, 132px) 0 clamp(48px, 9vh, 96px);
+  overflow: hidden;
 }
 
 .hero__inner {
+  position: relative;
+  z-index: 1;
   max-width: 940px;
   display: flex;
   flex-direction: column;
@@ -11,6 +15,10 @@
 }
 
 .hero__title {
+  position: relative;
+  /* Stack above the rain layer so the pile reads as sitting BEHIND the
+   * title text rather than over it. */
+  z-index: 2;
   font-family: var(--font-headline);
   font-size: clamp(30px, 4.6vw, 52px);
   line-height: 1.14;
@@ -19,6 +27,44 @@
   text-wrap: balance;
   opacity: 0;
   animation: hero-fade-in 1s ease-out 0.1s both;
+}
+
+/* The "with" in "obsessed with pistachios" gets a small pistachio
+ * sitting INLINE right before the word — like a tiny mascot tucked
+ * against the text. Appears after the main rain has vanished. */
+.hero__perched {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18em;
+  vertical-align: baseline;
+}
+.hero__perched-img {
+  width: clamp(22px, 2.6vw, 34px);
+  height: auto;
+  /* Nudge the pistachio 20px closer to the word it's pinned to. */
+  margin-inline-start: -20px;
+  transform: translateY(0.1em) rotate(-14deg);
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.22));
+  /* Appears as the rain pile begins vanishing. */
+  animation: hero-perched-appear 0.5s ease-out 3.0s both;
+}
+@keyframes hero-perched-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-0.2em) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0.1em) rotate(-14deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__perched-img {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 @keyframes hero-fade-in {
@@ -32,13 +78,26 @@
   }
 }
 
+/* Anchor for the falling-pistachio layer. Takes ZERO layout space so
+ * the subtitle stays snug against the title; the rain itself is
+ * absolutely positioned and overflows this zone in both directions. */
+.hero__pile-zone {
+  position: relative;
+  width: 100%;
+  height: 0;
+}
+
 .hero__sub {
   margin-top: 24px;
-  max-width: 64ch;
+  max-width: 78ch;
   font-size: clamp(16px, 1.4vw, 19px);
   font-weight: 300;
   color: var(--c-primary);
   line-height: 1.7;
+  /* Holds until the pistachio pile begins vanishing (≈3.0s in), then
+   * fades in alongside it. */
+  opacity: 0;
+  animation: hero-fade-in 0.6s ease-out 3.0s both;
 }
 
 .hero__greeting {
@@ -49,7 +108,8 @@
   white-space: nowrap;
   display: inline-block;
   clip-path: inset(-0.35em 100% -0.35em 0);
-  animation: hero-write 1.15s ease-out 0.7s forwards;
+  /* Hand-written reveal starts after the subtitle has faded in. */
+  animation: hero-write 1.15s ease-out 3.5s forwards;
 }
 
 @keyframes hero-write {
@@ -80,5 +140,17 @@
   }
   .hero__sub {
     margin-top: 18px;
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+  /* Release the nowrap groups so the subtitle wraps naturally on
+   * narrow viewports instead of overflowing horizontally. */
+  .hero__sub .hero__nowrap {
+    white-space: normal;
+  }
+  /* Nudge the perched pistachio 10px back to the right on mobile so it
+   * doesn't crowd the last letter of "obsessed". */
+  .hero__perched-img {
+    margin-inline-start: -10px;
   }
 }

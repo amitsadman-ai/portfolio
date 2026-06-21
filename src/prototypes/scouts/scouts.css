@@ -1,0 +1,139 @@
+/* ============================================================
+   Scouts Parent Portal — prototype-scoped styles
+   Everything is scoped under `.scouts` so RTL, the Alef font,
+   and brand colors never leak into the (English / LTR) portfolio.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Alef';
+  src: url('/fonts/Alef-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Alef';
+  src: url('/fonts/Alef-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---------- Scope root: tokens + direction + font ---------- */
+.scouts {
+  /* Brand palette (prototype-local — never added to global :root) */
+  --s-yellow: #fdbe30;
+  --s-yellow-dark: #e7a90f;
+  --s-green: #367757;
+  --s-green-dark: #2b5f46;
+  --s-green-soft: #e7f0ec;
+  --s-note: #e23328;
+  --s-ink: #1a1a1a;
+  --s-muted: #6b7669;
+  --s-paper: #ffffff;
+  --s-bg: #f4f6f3;
+  --s-line: rgba(26, 26, 26, 0.1);
+  --s-line-strong: rgba(26, 26, 26, 0.18);
+
+  --s-radius: 12px;
+  --s-radius-sm: 8px;
+  --s-radius-lg: 18px;
+  --s-shadow: 0 2px 10px rgba(43, 95, 70, 0.08);
+  --s-shadow-lg: 0 12px 40px rgba(26, 40, 33, 0.18);
+  --s-sidebar-w: 290px;
+
+  direction: rtl;
+  text-align: right;
+  font-family: 'Alef', var(--font-body);
+  color: var(--s-ink);
+  background: var(--s-bg);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scouts *,
+.scouts *::before,
+.scouts *::after {
+  box-sizing: border-box;
+}
+
+/* Force Alef everywhere inside the prototype — the portfolio sets a
+   global `h1,h2,h3 { font-family: var(--font-headline) }` (Young Serif,
+   which has no Hebrew glyphs). `:where()` keeps specificity at the class
+   level so it overrides those bare element selectors without an arms race. */
+.scouts :where(h1, h2, h3, h4, h5, h6, p, span, a, button, input, select,
+  textarea, label, li, td, th, div) {
+  font-family: 'Alef', var(--font-body);
+}
+
+.scouts button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.scouts input,
+.scouts select,
+.scouts textarea {
+  font-family: inherit;
+}
+
+/* Isolate LTR runs (prices, IDs, Latin dates) inside RTL text */
+.scouts__ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---------- App shell layout ---------- */
+.scouts-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--s-bg);
+}
+
+.scouts-shell__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.scouts-shell__content {
+  flex: 1 1 auto;
+  padding: 28px 36px 64px;
+  max-width: 1180px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+/* ---------- Phase 0 placeholder (replaced in later phases) ---------- */
+.scouts-boot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 100vh;
+  text-align: center;
+  padding: 24px;
+}
+.scouts-boot h1 {
+  color: var(--s-green);
+  font-size: 28px;
+  margin: 0;
+}
+.scouts-boot p {
+  color: var(--s-muted);
+  margin: 0;
+}
+.scouts-boot__chip {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .scouts-shell__content {
+    padding: 20px 16px 96px;
+  }
+}

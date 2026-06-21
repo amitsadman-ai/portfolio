@@ -1,0 +1,282 @@
+.s-drawer__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 33, 27, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 70;
+}
+.s-drawer__scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.s-drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0; /* left edge in RTL */
+  width: 400px;
+  max-width: 92vw;
+  background: var(--s-bg);
+  z-index: 75;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%); /* off-screen to the left (RTL) */
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--s-shadow-lg);
+}
+.s-drawer.is-open {
+  transform: translateX(0);
+}
+
+.s-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  background: var(--s-green);
+  color: #fff;
+}
+.s-drawer__title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.s-drawer__close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 6px;
+}
+.s-drawer__close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Horizontal stepper at the top of the cart drawer.
+ * Three numbered stops connected by lines: cart → declaration → payment. */
+.s-drawer__steps {
+  list-style: none;
+  margin: 0;
+  padding: 18px 24px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--s-line);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.s-drawer__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.s-drawer__step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1.5px solid var(--s-line-strong);
+  color: var(--s-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+/* Done — fully completed step, green-filled with a check icon. */
+.s-drawer__step.is-done .s-drawer__step-circle {
+  background: var(--s-green);
+  border-color: var(--s-green);
+  color: #fff;
+}
+/* Current — where the user is now: green ring, transparent fill. */
+.s-drawer__step.is-current .s-drawer__step-circle {
+  background: #fff;
+  border-color: var(--s-green);
+  color: var(--s-green);
+}
+/* Back-compat: any caller still passing the old `is-active` modifier
+ * keeps the original "done"-style filled appearance. */
+.s-drawer__step.is-active .s-drawer__step-circle {
+  background: var(--s-green);
+  border-color: var(--s-green);
+  color: #fff;
+}
+.s-drawer__step-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--s-muted);
+  white-space: nowrap;
+}
+.s-drawer__step.is-done .s-drawer__step-label,
+.s-drawer__step.is-current .s-drawer__step-label,
+.s-drawer__step.is-active .s-drawer__step-label {
+  color: var(--s-ink);
+  font-weight: 700;
+}
+.s-drawer__step-conn {
+  flex: 1;
+  height: 2px;
+  background: var(--s-line-strong);
+  margin-top: 17px; /* centers on the 36px icon */
+  list-style: none;
+  transition: background 0.2s ease;
+}
+.s-drawer__step-conn.is-active {
+  background: var(--s-green);
+}
+
+.s-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px;
+}
+
+.s-drawer__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  text-align: center;
+  color: var(--s-muted);
+  padding: 40px 20px;
+}
+.s-drawer__empty-illustration {
+  width: 180px;
+  max-width: 70%;
+  height: auto;
+  object-fit: contain;
+}
+
+.s-drawer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.s-drawer__group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.s-drawer__group-head {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.s-drawer__group-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-inline-start: 8px;
+}
+.s-drawer__group-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+.s-drawer__group-count {
+  font-weight: 400;
+  color: var(--s-muted);
+}
+.s-drawer__group-tribe {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--s-muted);
+}
+.s-drawer__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+.s-drawer__group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.s-drawer__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: var(--s-radius);
+  padding: 12px 14px;
+}
+.s-drawer__dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  flex: none;
+}
+.s-drawer__item-main {
+  flex: 1;
+  min-width: 0;
+}
+.s-drawer__item-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.s-drawer__item-sub {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--s-muted);
+}
+.s-drawer__item-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: none;
+}
+.s-drawer__item-end .s-price {
+  font-size: 15px;
+}
+.s-drawer__remove {
+  background: transparent;
+  border: none;
+  color: var(--s-muted);
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 6px;
+}
+.s-drawer__remove:hover {
+  color: var(--s-note);
+}
+
+.s-drawer__foot {
+  padding: 18px;
+  background: #fff;
+  border-top: 1px solid var(--s-line);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .s-drawer {
+    width: 100%;
+    max-width: 100%;
+  }
+}

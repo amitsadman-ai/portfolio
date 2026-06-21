@@ -1,0 +1,268 @@
+/* ---------- Shared primitive components ---------- */
+
+/* Button */
+.s-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+    transform 0.05s ease;
+  white-space: nowrap;
+}
+.s-btn:active {
+  transform: translateY(1px);
+}
+.s-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.s-btn--primary {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+}
+.s-btn--primary:hover:not(:disabled) {
+  background: var(--s-yellow-dark);
+}
+.s-btn--secondary {
+  background: var(--s-green);
+  color: #fff;
+}
+.s-btn--secondary:hover:not(:disabled) {
+  background: var(--s-green-dark);
+}
+.s-btn--ghost {
+  background: transparent;
+  color: var(--s-green);
+  border-color: var(--s-line-strong);
+}
+.s-btn--ghost:hover:not(:disabled) {
+  background: var(--s-green-soft);
+  border-color: var(--s-green);
+}
+.s-btn--danger {
+  background: var(--s-note);
+  color: #fff;
+}
+.s-btn--danger:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+.s-btn--full {
+  width: 100%;
+}
+.s-btn--sm {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+.s-btn__icon {
+  display: inline-flex;
+}
+
+/* Price */
+.s-price {
+  font-weight: 700;
+  white-space: nowrap;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+.s-price--muted {
+  color: var(--s-muted);
+  font-weight: 400;
+}
+.s-price__free {
+  color: var(--s-green);
+}
+
+/* Status pill */
+.s-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.s-pill::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.s-pill--active {
+  background: var(--s-green-soft);
+  color: var(--s-green);
+}
+.s-pill--completed {
+  background: #eef1f6;
+  color: #3f6f9e;
+}
+.s-pill--cancelled {
+  background: #fbe7e5;
+  color: var(--s-note);
+}
+/* "Soon" / upcoming status — pink tones. */
+.s-pill--upcoming {
+  background: #fde7ee;
+  color: #c43a6a;
+}
+
+/* Ribbon — corner badge on activity cards */
+.s-ribbon {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: -34px;
+  transform: translateX(-9px) rotate(-45deg);
+  background: #F1CECC;
+  color: #E23328;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 4px 36px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* iOS-style toggle switch — a hidden checkbox plus a styled track + thumb.
+ * Wrap with `.s-switch`, put the actual `<input type="checkbox">` inside,
+ * followed by the `.s-switch__track` aria-hidden span and the visible
+ * `.s-switch__label`. */
+.s-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.s-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.s-switch__track {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--s-line-strong);
+  transition: background 0.2s ease;
+}
+.s-switch__track::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+.s-switch__input:checked ~ .s-switch__track {
+  background: var(--s-green);
+}
+.s-switch__input:checked ~ .s-switch__track::before {
+  /* In RTL, slide the thumb leftward (visually = "end" of the track). */
+  transform: translateX(-16px);
+}
+.s-switch__input:focus-visible ~ .s-switch__track {
+  outline: 2px solid var(--s-green);
+  outline-offset: 2px;
+}
+.s-switch__label {
+  font-size: 14px;
+  color: var(--s-ink);
+}
+
+/* Form field */
+.s-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.s-field__label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+.s-field__req {
+  color: var(--s-note);
+  margin-inline-start: 2px;
+}
+.s-field__control {
+  width: 100%;
+  border: 1px solid var(--s-line-strong);
+  border-radius: var(--s-radius-sm);
+  padding: 11px 14px;
+  font-size: 15px;
+  background: #fff;
+  color: var(--s-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.s-field__control::placeholder {
+  color: #a6ada2;
+}
+.s-field__control:focus {
+  outline: none;
+  border-color: var(--s-green);
+  box-shadow: 0 0 0 3px rgba(54, 119, 87, 0.15);
+}
+.s-field__control:disabled {
+  background: #f3f5f1;
+  color: var(--s-muted);
+  cursor: not-allowed;
+}
+.s-field__control--textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+/* Custom dropdown chevron so the arrow can be positioned independently
+ * of the browser default (which sits flush against the field edge). */
+select.s-field__control {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: left 19px center; /* shifted 5px back toward the edge */
+  padding-inline-end: 40px;
+}
+.s-field__note {
+  font-size: 13px;
+  color: var(--s-muted);
+}
+.s-field__note--alert {
+  color: var(--s-note);
+}
+
+/* Child tabs */
+.s-childtabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.s-childtab {
+  background: transparent;
+  border: none;
+  padding: 8px 14px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--s-muted);
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.s-childtab:hover {
+  color: var(--s-ink);
+}
+.s-childtab[aria-selected='true'] {
+  color: #000000;
+  border-bottom-color: var(--s-yellow);
+}

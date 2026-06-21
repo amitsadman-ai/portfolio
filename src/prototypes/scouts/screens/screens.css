@@ -1,0 +1,658 @@
+/* Shared layout primitives for portal screens. */
+
+.s-section {
+  margin-bottom: 40px;
+}
+
+.s-section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+/* Title spans the full row; subtitle sits next to the action button on row 2 */
+.s-section__head--with-subaction {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 4px;
+}
+.s-section__head--with-subaction .s-section__title {
+  grid-column: 1 / -1;
+}
+.s-section__head--with-subaction .s-section__subtitle {
+  margin: 0;
+}
+
+.s-section__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+.s-subsection__title {
+  margin: 24px 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+
+/* History page — rich empty state shown when no registrations match the
+ * current filter (or the family has none at all). */
+.history__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 36px 24px;
+  text-align: center;
+}
+.history__empty-illustration {
+  width: 200px;
+  max-width: 70%;
+  height: auto;
+  object-fit: contain;
+}
+.history__empty p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--s-muted);
+}
+
+/* History page — row of dropdown filters above the table */
+.history__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+.history__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+.history__filter-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--s-muted);
+}
+.history__filter .s-field__control {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+.history__filter-reset {
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--s-line-strong);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--s-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.history__filter-reset:hover {
+  color: var(--s-green);
+  border-color: var(--s-green);
+}
+.s-section__subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--s-muted);
+}
+.s-section__note {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7669;
+  max-width: 720px;
+}
+
+.s-card {
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+  padding: 22px 24px;
+}
+.s-card--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.s-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.s-filter {
+  background: transparent;
+  border: 1px solid var(--s-line-strong);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--s-muted);
+  transition: all 0.15s ease;
+}
+.s-filter.is-active {
+  font-weight: 700;
+}
+.s-filter:hover {
+  border-color: var(--s-green);
+  color: var(--s-green);
+}
+.s-filter.is-active {
+  background: var(--s-green);
+  border-color: var(--s-green);
+  color: #fff;
+}
+
+/* Block wrapping the dashboard's per-child pill tabs */
+.s-childtabs-block__title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+.s-childtabs-block__subtitle {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--s-muted);
+}
+
+/* Upcoming (already paid) events — small cards row */
+.s-upcoming {
+  display: grid;
+  /* min(...) lets the column shrink below 380px on narrow phones (down to
+   * the viewport) instead of overflowing horizontally. */
+  grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 500px));
+  gap: 14px;
+  justify-content: start;
+}
+.s-upcoming__card {
+  background: #fff;
+  border: 1px solid #CFDCD5;
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.s-upcoming__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.s-upcoming__countdown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 33px;
+  background: linear-gradient(135deg, #EAF1EE 0%, #95B6A6 100%);
+  color: var(--s-ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 14px;
+  border-radius: 999px;
+}
+.s-upcoming__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--s-ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Mobile: drop the single-line ellipsis so the full activity name (incl.
+ * "שכבה ז'-ח'") reads on two lines instead of being chopped off. */
+@media (max-width: 768px) {
+  .s-upcoming__title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+.s-upcoming__meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--s-muted);
+}
+.s-upcoming__meta li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.s-upcoming__meta svg {
+  color: var(--s-green);
+  flex: none;
+}
+.s-upcoming__addcal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--s-line-strong);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--s-ink);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.s-upcoming__addcal:hover {
+  background: var(--s-green-soft);
+  border-color: var(--s-green);
+  color: var(--s-green);
+}
+.s-upcoming__addcal svg {
+  flex: none;
+  color: var(--s-green);
+}
+
+/* Activity grid — up to 4 cards in a row */
+.s-acard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+
+/* Wrapper that lets us pin a "more →" arrow over the gallery's edge */
+.s-acard-gallery-wrap {
+  position: relative;
+  margin-top: 14px;
+}
+/* Horizontal gallery — used when there are more than 4 activities.
+   Each card stays the same size; row scrolls horizontally. */
+.s-acard-gallery {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+/* "More" arrow button — sits over the LEFT edge in RTL because that's
+   the direction more cards are hiding. */
+.s-acard-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--s-line);
+  box-shadow: 0 6px 16px rgba(45, 51, 89, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--s-green);
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+}
+.s-acard-gallery-arrow--next {
+  left: -21px;
+}
+.s-acard-gallery-arrow--prev {
+  right: -21px;
+}
+.s-acard-gallery-arrow:hover {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 8px 22px rgba(45, 51, 89, 0.18);
+}
+.s-acard-gallery-arrow[disabled] {
+  opacity: 0;
+  pointer-events: none;
+}
+.s-acard-gallery > .s-acard {
+  flex: 0 0 calc((100% - 18px * 3) / 4); /* 4 cards visible at once */
+  min-width: 260px;
+  scroll-snap-align: start;
+}
+@media (max-width: 1024px) {
+  .s-acard-gallery > .s-acard {
+    flex: 0 0 calc((100% - 18px * 2) / 3);
+  }
+}
+@media (max-width: 720px) {
+  .s-acard-gallery > .s-acard {
+    flex: 0 0 calc((100% - 18px) / 2);
+  }
+}
+@media (max-width: 480px) {
+  .s-acard-gallery > .s-acard {
+    flex: 0 0 85%;
+  }
+}
+
+/* Confirmation modal — generic centered dialog */
+.s-modal__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 33, 27, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+  animation: s-modal-fade 0.18s ease-out;
+}
+.s-modal {
+  background: #fff;
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow-lg);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  animation: s-modal-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center top;
+}
+@keyframes s-modal-fade {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+@keyframes s-modal-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97) }
+  to { opacity: 1; transform: translateY(0) scale(1) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-modal__scrim, .s-modal { animation: none }
+}
+.s-modal__title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+.s-modal__body {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--s-muted);
+}
+.s-modal__body strong {
+  color: #000000;
+}
+.s-modal__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.s-modal--wide {
+  max-width: 720px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+.s-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.s-modal__head .s-modal__title {
+  margin: 0;
+}
+.s-modal__close {
+  background: transparent;
+  border: none;
+  color: var(--s-muted);
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.s-modal__close:hover {
+  background: var(--s-green-soft);
+  color: var(--s-green);
+}
+.s-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 560px) {
+  .s-modal__grid {
+    grid-template-columns: 1fr;
+  }
+}
+.s-modal__row-wide {
+  grid-column: 1 / -1;
+}
+.s-modal__row-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--s-ink);
+  margin-bottom: 6px;
+}
+/* Segmented control used for the ID-type toggle in the edit modal */
+.s-toggle {
+  display: inline-flex;
+  background: var(--s-line);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+.s-toggle__btn {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--s-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.s-toggle__btn.is-active {
+  background: var(--s-green);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Expanded-row details grid shown under a roster row when its chevron is open */
+.s-table__expanded > td {
+  background: #f6f8f7;
+  padding: 18px 20px !important;
+  border-bottom: 1px solid var(--s-line);
+}
+.s-child-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px 24px;
+}
+.s-child-details__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.s-child-details__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--s-muted);
+}
+.s-child-details__value {
+  font-size: 14px;
+  color: var(--s-ink);
+}
+/* Chevron-down expand button in the row-actions cell */
+.s-rowactions__expand svg {
+  transition: transform 0.18s ease;
+}
+.s-rowactions__expand.is-open svg {
+  transform: rotate(180deg);
+}
+.s-modal__actions .s-btn--ghost {
+  color: #000000;
+  font-weight: 400;
+}
+.s-modal__actions .s-btn--ghost:hover:not(:disabled) {
+  background: transparent;
+  border-color: var(--s-line-strong);
+  color: #000000;
+}
+
+/* Empty states */
+.s-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--s-muted);
+  background: #fff;
+  border: 1px dashed var(--s-line-strong);
+  border-radius: var(--s-radius);
+}
+.s-empty__emoji {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Name cell with avatar dot */
+.s-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.s-name__dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  flex: none;
+}
+.s-name__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+
+/* Row action icons */
+.s-rowactions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Mobile-only refinements for "card-rows" tables — each row becomes a
+ * standalone card with a header cell (no label, bigger type), a trailing
+ * cell pinned to the top corner (status pill or row actions), and a
+ * compact property list below. Used by the Family and History screens. */
+@media (max-width: 768px) {
+  .s-cardrows .s-table tbody tr {
+    position: relative;
+    padding: 16px 16px 12px;
+    /* Drop the per-card hairline border — it doubled up at the seams
+     * between cards and read as an empty band. The soft shadow alone
+     * separates them cleanly. */
+    border: none;
+    box-shadow: 0 2px 12px rgba(43, 95, 70, 0.07);
+    margin-bottom: 18px;
+  }
+  /* First cell becomes a header row: hide the label, let the content
+   * (name, title) span full-width with bigger type. */
+  .s-cardrows .s-table tbody td:first-child {
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--s-line);
+    margin-bottom: 8px;
+    font-size: 17px;
+  }
+  .s-cardrows .s-table tbody td:first-child::before {
+    display: none;
+  }
+  /* The trailing cell (row actions on Family, status pill on History)
+   * pins to the top corner of the card so it sits next to the header. */
+  .s-cardrows .s-table tbody td:last-child {
+    position: absolute;
+    top: 14px;
+    /* In RTL the LTR-left edge is the row-end; inset-inline-end keeps
+     * it visually next to the header regardless of direction. */
+    inset-inline-end: 12px;
+    padding: 0;
+    width: auto;
+    border: none;
+  }
+  .s-cardrows .s-table tbody td:last-child::before {
+    display: none;
+  }
+  /* Tighten the remaining property rows. */
+  .s-cardrows .s-table tbody td {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  .s-cardrows .s-table tbody td::before {
+    font-size: 13px;
+  }
+  /* Drop the last property row's divider so the card ends cleanly. */
+  .s-cardrows .s-table tbody td:nth-last-child(2) {
+    border-bottom: none;
+  }
+}
+
+/* Family screen specifics — bigger avatar + name in the header. */
+@media (max-width: 768px) {
+  .s-people-table .s-table tbody td:first-child .s-name {
+    font-size: 17px;
+    gap: 12px;
+  }
+  .s-people-table .s-table tbody td:first-child .s-name__avatar,
+  .s-people-table .s-table tbody td:first-child .s-name__dot {
+    width: 42px;
+    height: 42px;
+    font-size: 15px;
+  }
+  .s-people-table .s-rowactions {
+    gap: 4px;
+  }
+}
+.s-rowactions button {
+  background: transparent;
+  border: none;
+  color: var(--s-muted);
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.s-rowactions button:hover {
+  color: var(--s-green);
+  background: var(--s-green-soft);
+}
+.s-rowactions button.is-danger {
+  color: #E23328;
+}
+.s-rowactions button.is-danger:hover {
+  color: #E23328;
+  background: #fbe7e5;
+}

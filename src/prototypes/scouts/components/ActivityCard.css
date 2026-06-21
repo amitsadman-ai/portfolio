@@ -1,0 +1,149 @@
+.s-acard {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.s-acard__top {
+  padding: 16px 18px 14px;
+  border-bottom: 3px solid var(--type-accent, var(--s-green));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--type-accent, var(--s-green)) 7%, #fff),
+    #fff
+  );
+}
+.s-acard__type {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--type-accent, var(--s-green));
+  background: color-mix(in srgb, var(--type-accent, var(--s-green)) 14%, #fff);
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+.s-acard__title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--s-ink);
+}
+
+.s-acard__body {
+  padding: 14px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.s-acard__desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--s-muted);
+  line-height: 1.5;
+}
+.s-acard__more {
+  display: block;
+  margin-top: 4px;
+  color: var(--s-ink);
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.s-acard__more:hover {
+  color: var(--s-green);
+}
+.s-acard__meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.s-acard__meta li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--s-ink);
+}
+.s-acard__meta svg {
+  color: var(--s-green);
+  flex: none;
+}
+.s-acard__deadline {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--s-note);
+}
+
+.s-acard__foot {
+  padding: 14px 18px;
+  border-top: 1px solid var(--s-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+.s-acard__foot .s-price {
+  font-size: 18px;
+}
+/* In-cart visual state — the whole card gets a soft sage gradient wash */
+.s-acard.is-in-cart .s-acard__top,
+.s-acard.is-in-cart .s-acard__body,
+.s-acard.is-in-cart .s-acard__foot {
+  background: linear-gradient(
+    135deg,
+    rgba(238, 238, 238, 0.5) 0%,
+    rgba(221, 221, 221, 0.5) 100%
+  );
+  transition: background 0.35s ease;
+}
+.s-acard.is-in-cart .s-acard__foot {
+  border-top-color: rgba(221, 221, 221, 0.5);
+}
+.s-acard__foot--in-cart {
+  /* legacy alias — actual styles live on .s-acard.is-in-cart above */
+}
+.s-acard__added {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  animation: s-acard-added 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.s-acard__added svg {
+  color: #000000;
+  margin-top: 5px;
+  animation: s-acard-check 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+}
+@keyframes s-acard-added {
+  from { opacity: 0; transform: translateX(8px) }
+  to { opacity: 1; transform: translateX(0) }
+}
+@keyframes s-acard-check {
+  from { opacity: 0; transform: scale(0.4) }
+  to { opacity: 1; transform: scale(1) }
+}
+/* Remove-from-cart button sitting on the green bg — white outline pill */
+.s-acard__remove-btn {
+  background: transparent;
+  border-color: #FDBE30;
+  color: #000000;
+}
+.s-acard__remove-btn:hover:not(:disabled) {
+  background: rgba(253, 190, 48, 0.12);
+  border-color: #FDBE30;
+  color: #000000;
+}

@@ -11,7 +11,9 @@ export default function ProjectsSection() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return
 
-    const cards = Array.from(listRef.current?.querySelectorAll('.card') || [])
+    const cards = Array.from(
+      listRef.current?.querySelectorAll('.card:not(.card--disabled)') || [],
+    )
     let raf = 0
 
     const update = () => {
@@ -75,7 +77,7 @@ export default function ProjectsSection() {
     <section id="work" className="work">
       <div className="container">
         <Reveal as="header" className="work__head">
-          <h2 className="work__heading">Projects along the way</h2>
+          <h2 className="work__heading">My projects along the way</h2>
         </Reveal>
 
         <div className="work__list" ref={listRef}>

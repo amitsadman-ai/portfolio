@@ -1,0 +1,151 @@
+.s-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.s-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.s-table thead th {
+  text-align: start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--s-muted);
+  background: #E8ECEA;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--s-line);
+  white-space: nowrap;
+}
+
+.s-table tbody td {
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--s-line);
+  vertical-align: middle;
+}
+.s-table tbody td .s-price {
+  color: #000000;
+}
+
+.s-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.s-table tfoot .s-table__summary td {
+  padding: 14px;
+  font-weight: 700;
+  background: #ffffff;
+  border-top: 1px solid var(--s-line);
+  color: var(--s-ink);
+}
+.s-table tfoot .s-table__summary .s-price__free {
+  color: #000000;
+}
+/* Hand-drawn red "circle highlight" around the total amount in the
+ * summary row. Inline SVG keeps it self-contained and scales to the
+ * price's actual width. */
+.s-table tfoot .s-table__summary .s-price {
+  position: relative;
+  display: inline-block;
+  padding: 6px 18px;
+  z-index: 0;
+}
+.s-table tfoot .s-table__summary .s-price::before {
+  content: '';
+  position: absolute;
+  inset: -6px -10px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 50' preserveAspectRatio='none'><path d='M12 26 C12 8 108 6 114 24 C118 44 14 48 8 26' fill='none' stroke='%23E23328' stroke-width='2.2' stroke-linecap='round'/></svg>") no-repeat center;
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+/* Refund row uses the same hand-drawn circle but in the brand green. */
+.s-table tfoot .s-table__summary--credit .s-price::before {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 50' preserveAspectRatio='none'><path d='M12 26 C12 8 108 6 114 24 C118 44 14 48 8 26' fill='none' stroke='%23367757' stroke-width='2.2' stroke-linecap='round'/></svg>") no-repeat center;
+  background-size: 100% 100%;
+}
+
+.s-table tbody tr:hover {
+  background: var(--s-green-soft);
+}
+
+.s-table__empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--s-muted);
+  font-size: 15px;
+}
+
+/* ≤768px: collapse rows into stacked cards. */
+@media (max-width: 768px) {
+  .s-table thead {
+    display: none;
+  }
+  .s-table,
+  .s-table tbody,
+  .s-table tr,
+  .s-table td {
+    display: block;
+    width: 100%;
+  }
+  .s-table tbody tr {
+    background: #fff;
+    border: 1px solid var(--s-line);
+    border-radius: var(--s-radius);
+    padding: 6px 14px;
+    margin-bottom: 12px;
+  }
+  .s-table tbody tr:hover {
+    background: #fff;
+  }
+  .s-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    text-align: start !important;
+  }
+  .s-table tbody td::before {
+    content: attr(data-label);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--s-muted);
+  }
+  /* Hide label for an actions cell that has no useful label */
+  .s-table tbody td[data-label='']::before {
+    content: none;
+  }
+  /* Summary row (tfoot) — render as a flat single-row strip with the
+   * label on one side and the total on the other. Drop the desktop
+   * translateX nudge that was only there to line up with a status
+   * column on a wide table. */
+  .s-table tfoot,
+  .s-table tfoot tr,
+  .s-table tfoot td {
+    display: block;
+  }
+  .s-table tfoot .s-table__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 14px;
+    margin-top: 4px;
+  }
+  .s-table tfoot .s-table__summary td {
+    padding: 6px 0;
+    background: transparent;
+    border-top: none;
+  }
+  /* Hide colspan'd empty cells in the summary row so the price stays
+   * snug against the label. */
+  .s-table tfoot .s-table__summary td:empty {
+    display: none;
+  }
+  .s-table tfoot .s-table__summary td > span {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,54 @@
+.discounts__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.discount {
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.discount__badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.discount__title {
+  margin: 0;
+  font-size: 18px;
+}
+.discount__desc {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  color: var(--s-muted);
+  line-height: 1.5;
+}
+.discount__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--s-muted);
+}
+.discount__tag.is-auto {
+  color: var(--s-green);
+}

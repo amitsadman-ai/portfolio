@@ -141,9 +141,9 @@ body:has(.about) .bg-layer::after {
   margin: 4px 0 6px;
 }
 .about__exp-bullets {
-  list-style: disc;
+  list-style: none;
   margin: 4px 0 0;
-  padding-left: 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -151,8 +151,19 @@ body:has(.about) .bg-layer::after {
   font-size: clamp(15px, 1.2vw, 17px);
   line-height: 1.55;
 }
-.about__exp-bullets li::marker {
-  color: #fff5c1;
+.about__exp-bullets li {
+  position: relative;
+  padding-left: 20px;
+}
+.about__exp-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff5c1;
 }
 
 /* ---------- Skills marquee ---------- */

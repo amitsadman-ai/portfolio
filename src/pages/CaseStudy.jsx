@@ -13,6 +13,35 @@ import Typewriter from '../components/Typewriter'
 import Questionnaire from '../components/Questionnaire'
 import './CaseStudy.css'
 
+/* Crossfade slideshow: cycles through `images` every 3s, stacking them so
+ * the next image fades in over the current one. Pauses while the tab is
+ * hidden to avoid wasted timer cycles. */
+function AutoCycle({ images, alt = '', className = '' }) {
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    if (!images || images.length < 2) return
+    const id = setInterval(() => {
+      setIdx((i) => (i + 1) % images.length)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [images])
+  if (!images?.length) return null
+  return (
+    <div className={`cs__cycle ${className}`}>
+      {images.map((src, i) => (
+        <img
+          key={src}
+          className={`cs__cycle-img ${i === idx ? 'is-active' : ''}`}
+          src={src}
+          alt={i === idx ? alt : ''}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          aria-hidden={i === idx ? undefined : 'true'}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function CaseStudy() {
   const { slug } = useParams()
   const project = getProject(slug)
@@ -41,14 +70,16 @@ export default function CaseStudy() {
     )
   }
 
-  const { tag, title, body, logos, csBody, csTagline, apps, problem, today, research, solution, questionnaire, gallery, newScreens, reflection, banner } = project
+  const { tag, title, body, logos, csBody, csTagline, apps, problem, problemLabel, today, todayLabel, todayCaption, todayDesktop, todayDesktopCaption, research, solution, solutionLabel, solutionImage, solutionImageAlt, questionnaire, gallery, newScreens, screensLabel, reflection, banner, bannerShift: projectBannerShift, bannerAspect: projectBannerAspect, bannerFit: projectBannerFit, bannerOffsetY: projectBannerOffsetY, extraSections } = project
+  const screensLabelText = screensLabel || 'New screens'
   const paragraphs = csBody || [body]
   // Per-app banner falls back to the project-level banner (for non-apps case studies)
   const activeApp = apps?.[activeAppIndex]
   const activeBanner = activeApp?.banner ?? banner
-  const bannerShift = activeApp?.bannerShift ?? 100
-  const bannerAspect = activeApp?.bannerAspect ?? '1800 / 318'
-  const bannerFit = activeApp?.bannerFit ?? 'cover'
+  const bannerShift = activeApp?.bannerShift ?? projectBannerShift ?? 100
+  const bannerAspect = activeApp?.bannerAspect ?? projectBannerAspect ?? '1800 / 318'
+  const bannerFit = activeApp?.bannerFit ?? projectBannerFit ?? 'cover'
+  const bannerOffsetY = activeApp?.bannerOffsetY ?? projectBannerOffsetY ?? 0
   // Lightbox for non-apps case studies that have a gallery
   const [lightbox, setLightbox] = useState(null)
 
@@ -62,6 +93,7 @@ export default function CaseStudy() {
             '--banner-shift': `${bannerShift}px`,
             '--banner-aspect': bannerAspect,
             '--banner-fit': bannerFit,
+            '--banner-offset-y': `${bannerOffsetY}px`,
           }}
         >
           <img className="cs__banner-img" src={activeBanner} alt="" />
@@ -103,6 +135,25 @@ export default function CaseStudy() {
             </p>
           ))}
 
+          {project.demoUrl && (
+            <Reveal className="cs__demo">
+              <div className="cs__demo-text">
+                <span className="cs__demo-eyebrow">Interactive prototype</span>
+                {project.demoNote && (
+                  <p className="cs__demo-note">{project.demoNote}</p>
+                )}
+              </div>
+              <a
+                className="cs__demo-btn"
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Log in <ArrowRight size={18} />
+              </a>
+            </Reveal>
+          )}
+
           {apps && apps.length > 0 && (
             <AppFixes
               apps={apps}
@@ -113,14 +164,37 @@ export default function CaseStudy() {
 
           {/* Non-apps case studies: optional eyebrow sections */}
           {!apps && problem && (
-            <Reveal className="app__block">
-              <span className="app__label">The problem</span>
+            <Reveal className={`app__block${project.problemWide ? ' app__block--wide-text' : ''}`}>
+              <span className="app__label">{problemLabel || 'The problem'}</span>
               {Array.isArray(problem) ? (
                 problem.map((p, i) => (
                   <p key={i} className="app__text">
                     {p}
                   </p>
                 ))
+              ) : typeof problem === 'object' && problem.bullets ? (
+                <ul className="cs__problem-bullets">
+                  {problem.bullets.map((b, i) => (
+                    <li key={i}>
+                      {typeof b === 'string' ? (
+                        b
+                      ) : (
+                        <>
+                          {b.lead && (
+                            <span className="cs__problem-lead">{b.lead}</span>
+                          )}
+                          {b.text}
+                          {b.cite && (
+                            <>
+                              {' '}
+                              <span className="cs__problem-cite">{b.cite}</span>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <p className="app__text">{problem}</p>
               )}
@@ -128,26 +202,46 @@ export default function CaseStudy() {
           )}
           {!apps && today && (
             <Reveal className="app__block">
-              <span className="app__label">How it looks today</span>
+              <span className="app__label">{todayLabel || 'How it looks today'}</span>
               {today.length > 0 && (
-                <div className="cs__today">
-                  {today.map((item, i) => {
-                    const src = typeof item === 'string' ? item : item.src
-                    const caption = typeof item === 'object' ? item.title : null
-                    return (
-                      <figure key={i} className="cs__today-item">
-                        <img
-                          className="cs__today-img"
-                          src={src}
-                          alt={caption || `${title} — current screen ${i + 1}`}
-                          loading="lazy"
-                        />
-                        {caption && (
-                          <figcaption className="cs__today-title">{caption}</figcaption>
-                        )}
-                      </figure>
-                    )
-                  })}
+                <div className="cs__today-row">
+                  <figure className="cs__today-figure">
+                    {todayCaption && (
+                      <figcaption className="cs__today-caption">{todayCaption}</figcaption>
+                    )}
+                    <div className="cs__today">
+                      {today.map((item, i) => {
+                        const src = typeof item === 'string' ? item : item.src
+                        const caption = typeof item === 'object' ? item.title : null
+                        return (
+                          <figure key={i} className="cs__today-item">
+                            <img
+                              className="cs__today-img"
+                              src={src}
+                              alt={caption || `${title} — current screen ${i + 1}`}
+                              loading="lazy"
+                            />
+                            {caption && (
+                              <figcaption className="cs__today-title">{caption}</figcaption>
+                            )}
+                          </figure>
+                        )
+                      })}
+                    </div>
+                  </figure>
+                  {todayDesktop?.length > 0 && (
+                    <figure className="cs__today-desktop">
+                      {todayDesktopCaption && (
+                        <figcaption className="cs__today-caption">
+                          {todayDesktopCaption}
+                        </figcaption>
+                      )}
+                      <AutoCycle
+                        images={todayDesktop}
+                        alt={`${title} — current desktop screen`}
+                      />
+                    </figure>
+                  )}
                 </div>
               )}
             </Reveal>
@@ -192,7 +286,7 @@ export default function CaseStudy() {
           )}
           {!apps && solution && (
             <Reveal className="app__block app__block--wide-text">
-              <span className="app__label">The solution</span>
+              <span className="app__label">{solutionLabel || 'The solution'}</span>
               {Array.isArray(solution) ? (
                 solution.map((p, i) => (
                   <p key={i} className="app__text">
@@ -201,6 +295,21 @@ export default function CaseStudy() {
                 ))
               ) : (
                 <p className="app__text">{solution}</p>
+              )}
+              {solutionImage && (
+                <button
+                  type="button"
+                  className="cs__solution-img-btn"
+                  onClick={() => setLightbox(solutionImage)}
+                  aria-label={`Expand ${solutionImageAlt || 'solution image'}`}
+                >
+                  <img
+                    className="cs__solution-img"
+                    src={solutionImage}
+                    alt={solutionImageAlt || ''}
+                    loading="lazy"
+                  />
+                </button>
               )}
             </Reveal>
           )}
@@ -211,7 +320,7 @@ export default function CaseStudy() {
           )}
           {!apps && newScreens && newScreens.length > 0 && (
             <Reveal className="app__block">
-              <span className="app__label">New screens</span>
+              <span className="app__label">{screensLabelText}</span>
               <div className="cs__new-screens">
                 {newScreens.map((section, i) => (
                   <NewScreensSection
@@ -224,9 +333,27 @@ export default function CaseStudy() {
               </div>
             </Reveal>
           )}
+          {!apps && newScreens && newScreens.length > 0 && project.demoUrl && (
+            <Reveal className="cs__demo cs__demo--bottom">
+              <div className="cs__demo-text">
+                <span className="cs__demo-eyebrow">Interactive prototype</span>
+                {project.demoNote && (
+                  <p className="cs__demo-note">{project.demoNote}</p>
+                )}
+              </div>
+              <a
+                className="cs__demo-btn"
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Log in <ArrowRight size={18} />
+              </a>
+            </Reveal>
+          )}
           {!apps && !newScreens && gallery && (
             <Reveal className="app__block">
-              <span className="app__label">New screens</span>
+              <span className="app__label">{screensLabelText}</span>
               {gallery.length > 0 && (
                 <AutoGallery
                   images={gallery}
@@ -236,6 +363,14 @@ export default function CaseStudy() {
               )}
             </Reveal>
           )}
+          {!apps && extraSections && extraSections.map((sec, i) => (
+            <Reveal key={i} className="app__block">
+              <span className="app__label">{sec.label}</span>
+              {sec.paragraphs && sec.paragraphs.map((p, j) => (
+                <p key={j} className="app__text">{p}</p>
+              ))}
+            </Reveal>
+          ))}
           {!apps && reflection && reflection.length > 0 && (
             <Reveal className="app__block app__block--wide-text">
               <span className="app__label">Built from Firsthand Experience</span>

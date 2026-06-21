@@ -78,26 +78,46 @@ export default function Header() {
                     onMouseEnter={openWorkMenu}
                     onMouseLeave={closeWorkMenu}
                   >
-                    {projects.map((p) => (
-                      <Link
-                        key={p.slug}
-                        to={`/work/${p.slug}`}
-                        className="header__work-card"
-                        onClick={() => {
-                          setWorkOpen(false)
-                          setOpen(false)
-                        }}
-                      >
-                        {p.image ? (
-                          <img className="header__work-card-thumb" src={p.image} alt="" />
-                        ) : (
-                          <span className="header__work-card-thumb header__work-card-thumb--ph" />
-                        )}
-                        <span className="header__work-card-name">
-                          {p.shortName || p.title}
-                        </span>
-                      </Link>
-                    ))}
+                    {projects.map((p) =>
+                      p.comingSoon ? (
+                        <div
+                          key={p.slug}
+                          className="header__work-card header__work-card--disabled"
+                          aria-disabled="true"
+                        >
+                          <span className="header__work-card-thumb-wrap">
+                            {p.image ? (
+                              <img className="header__work-card-thumb" src={p.image} alt="" />
+                            ) : (
+                              <span className="header__work-card-thumb header__work-card-thumb--ph" />
+                            )}
+                            <span className="header__work-card-badge">coming soon</span>
+                          </span>
+                          <span className="header__work-card-name">
+                            {p.shortName || p.title}
+                          </span>
+                        </div>
+                      ) : (
+                        <Link
+                          key={p.slug}
+                          to={`/work/${p.slug}`}
+                          className="header__work-card"
+                          onClick={() => {
+                            setWorkOpen(false)
+                            setOpen(false)
+                          }}
+                        >
+                          {p.image ? (
+                            <img className="header__work-card-thumb" src={p.image} alt="" />
+                          ) : (
+                            <span className="header__work-card-thumb header__work-card-thumb--ph" />
+                          )}
+                          <span className="header__work-card-name">
+                            {p.shortName || p.title}
+                          </span>
+                        </Link>
+                      ),
+                    )}
                   </div>
                 )}
               </div>

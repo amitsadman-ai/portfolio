@@ -73,3 +73,9 @@ __pycache__/
 /Scouts system/
 /fonts/
 /💡 UX/
+
+# Local Netlify folder
+.netlify
+
+# Scouts standalone build output
+dist-scouts/

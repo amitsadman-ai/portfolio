@@ -1,0 +1,35 @@
+.addchild {
+  max-width: 720px;
+}
+
+.addchild__title {
+  margin: 0 0 6px;
+  font-size: 21px;
+  font-weight: 700;
+}
+.addchild__sub {
+  margin: 0 0 22px;
+  font-size: 14px;
+  color: var(--s-muted);
+}
+
+.addchild__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.addchild__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--s-line);
+}
+
+@media (max-width: 600px) {
+  .addchild__grid {
+    grid-template-columns: 1fr;
+  }
+}

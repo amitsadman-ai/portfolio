@@ -140,13 +140,38 @@
 }
 
 @media (max-width: 600px) {
-  .phone-scene__phones {
-    flex-wrap: wrap;
-    gap: 8px !important;
+  /* Mobile: turn the phone scene into a horizontally-scrolling gallery
+   * instead of stacking. Wraps and tilts get dropped so the row reads
+   * like a carousel; snap stops keep the user landing on whole screens. */
+  .phone-scene {
+    padding: clamp(28px, 6vw, 40px) 0;
   }
-  .phone-scene--3 .phone-scene__phone,
-  .phone-scene--2 .phone-scene__phone {
+  .phone-scene__phones {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* Inset gutters mimic the outer container's horizontal padding so
+     * the first and last phones aren't flush against the edge. */
+    padding: 8px clamp(16px, 4vw, 28px);
+    scroll-padding-inline: clamp(16px, 4vw, 28px);
+    gap: 16px !important;
+    scrollbar-width: none;
+  }
+  .phone-scene__phones::-webkit-scrollbar {
+    display: none;
+  }
+  .phone-scene__phone {
+    width: 64% !important;
+    max-width: 280px;
     transform: none !important;
-    width: 60% !important;
+    scroll-snap-align: start;
+    z-index: auto !important;
+  }
+  /* The hand-drawn arrow overlay doesn't make sense on a scrolling row. */
+  .phone-scene__arrow {
+    display: none;
   }
 }

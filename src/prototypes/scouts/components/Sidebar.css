@@ -1,0 +1,132 @@
+.s-sidebar {
+  width: var(--s-sidebar-w);
+  flex: 0 0 var(--s-sidebar-w);
+  background: var(--s-green);
+  color: #fff;
+  padding: 26px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: flex-start;
+  overflow-y: auto;
+}
+
+.s-sidebar__close {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.s-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.s-sidebar__brand img {
+  width: 60px;
+  height: 60px;
+}
+
+.s-sidebar__greeting-hello {
+  font-weight: 400;
+}
+.s-sidebar__greeting {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.s-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.s-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.s-sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.s-sidebar__link.is-active {
+  background: #fff;
+  color: #367757;
+}
+.s-sidebar__link.is-active svg {
+  color: #367757;
+}
+
+.s-sidebar__logout {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: var(--s-radius-sm);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 15px;
+  font-weight: 700;
+  transition: background 0.15s ease;
+}
+.s-sidebar__logout:hover {
+  background: rgba(0, 0, 0, 0.14);
+  color: #fff;
+}
+
+.s-sidebar__scrim {
+  display: none;
+}
+
+/* ≤1024px: off-canvas drawer from the right (RTL). */
+@media (max-width: 1024px) {
+  .s-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0; /* right edge in RTL */
+    transform: translateX(100%); /* off-screen to the right */
+    transition: transform 0.25s ease;
+    z-index: 60;
+    box-shadow: var(--s-shadow-lg);
+  }
+  .s-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .s-sidebar__close {
+    display: block;
+  }
+  .s-sidebar__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 33, 27, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 55;
+  }
+  .s-sidebar__scrim.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

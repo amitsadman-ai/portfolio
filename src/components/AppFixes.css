@@ -56,10 +56,81 @@
      stacked questions in the BuyMe subtitle) */
   white-space: pre-line;
 }
+/* Bulleted list inside a problem block — same 8x8 cream-yellow dots
+   as the case-study problem bullets, but at body-text density */
+.app__problem-bullets {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--c-text);
+}
+.app__problem-bullets li {
+  position: relative;
+  padding-left: 22px;
+}
+.app__problem-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fcf1b5;
+}
+
+/* Inline screenshot inside a problem/solution description, click-to-expand */
+.app__inline-img-btn {
+  display: block;
+  width: 60%;
+  margin: 18px 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.app__inline-img-btn:hover {
+  transform: translateY(-2px);
+}
+.app__inline-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.app__inline-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+@media (max-width: 600px) {
+  .app__inline-img-btn {
+    width: 100%;
+  }
+}
+
 .app__subtitle-bullet {
-  color: #fff5c1;
-  font-weight: 700;
-  margin-right: 6px;
+  /* 8x8 soft-yellow circle — replaces the unicode • character so the
+     bullet is exact-sized and consistent with bullets across the site.
+     font-size:0 hides the literal • inside the span; the colored
+     border-radius circle takes over visually */
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff5c1;
+  margin-right: 8px;
+  vertical-align: middle;
+  font-size: 0;
+  /* nudge up so the dot reads centered with the cap-height of the line */
+  position: relative;
+  top: -2px;
 }
 
 .app__block {

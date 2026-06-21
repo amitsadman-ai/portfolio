@@ -137,6 +137,37 @@
   line-height: 1.3;
   color: var(--c-text);
 }
+.header__work-card--disabled {
+  cursor: default;
+}
+.header__work-card--disabled:hover {
+  background: transparent;
+  transform: none;
+}
+.header__work-card--disabled:hover .header__work-card-thumb {
+  box-shadow: 0 6px 18px rgba(45, 51, 89, 0.1);
+}
+.header__work-card-thumb-wrap {
+  position: relative;
+  display: block;
+}
+.header__work-card--disabled .header__work-card-thumb {
+  opacity: 0.8;
+}
+.header__work-card-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--c-text);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 5px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 
 .header__icons {

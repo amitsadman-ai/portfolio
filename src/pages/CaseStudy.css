@@ -16,6 +16,7 @@
   margin-left: calc(-1 * var(--banner-shift, 100px));
   object-fit: var(--banner-fit, cover);
   object-position: center bottom;
+  transform: translateY(var(--banner-offset-y, 0px));
 }
 
 .cs {
@@ -82,18 +83,153 @@
   margin: 0 0 12px;
 }
 .cs__body + .cs__body {
-  margin-top: 1em;
+  margin-top: 0;
+}
+
+/* Bulleted variant for the "problem" block (e.g. Skeep) — same body type
+   as .app__text, with custom 8x8 cream-yellow dots (matches About bullets) */
+.cs__problem-bullets {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  color: var(--c-text);
+}
+.cs__problem-bullets li {
+  /* honor explicit \n in bullet text (e.g. break before a long pull-quote) */
+  white-space: pre-line;
+  position: relative;
+  padding-left: 22px;
+}
+.cs__problem-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fcf1b5;
+}
+/* Bold opener at the start of a bullet — 600 = HelveticaNeueMedium per
+   the font-face map; using a <span> + explicit weight rather than <strong>
+   so we don't default to weight 700 */
+.cs__problem-lead {
+  font-weight: 700;
+  color: var(--c-primary);
+}
+/* Citation/source after a bullet — handwritten OoohBaby script,
+   slightly larger to read like a real quote attribution */
+.cs__problem-cite {
+  font-family: var(--font-script);
+  font-size: 1.15em;
+  color: var(--c-primary);
+  line-height: 1;
+}
+
+/* Diagram/illustration that sits under "The solution" body copy
+   (e.g. Skeep's how-it-works) — wide image, rounded edges, soft shadow.
+   Wrapped in a button so clicking it opens the lightbox. */
+.cs__solution-img-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  margin-top: clamp(20px, 2.4vw, 32px);
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+.cs__solution-img-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__solution-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__solution-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
 }
 
 /* "How it looks today" — 2-column grid with OoohBaby caption per image */
+/* Two-column row: mobile grid on one side, desktop crossfade on the other.
+ * The two figures share the row's width 1:1 on wide screens and stack on
+ * narrow screens. */
+.cs__today-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 4vw, 56px);
+  align-items: flex-start;
+  margin-top: 8px;
+}
+/* When the case study has NO desktop slideshow (only the mobile grid),
+ * give the single child the full row width — otherwise the empty right
+ * column squeezes the screenshots into half the space. */
+.cs__today-row:not(:has(.cs__today-desktop)) {
+  grid-template-columns: 1fr;
+}
+.cs__today-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.cs__today-desktop {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+/* Crossfade slideshow: each image stacks at the same position; opacity
+ * transitions handle the dissolve between them. */
+.cs__cycle {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  background: var(--c-white);
+}
+.cs__cycle-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+.cs__cycle-img.is-active {
+  opacity: 1;
+}
+@media (max-width: 720px) {
+  .cs__today-row {
+    grid-template-columns: 1fr;
+  }
+}
 .cs__today {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(10px, 1.2vw, 18px);
-  margin-top: 8px;
-  /* aligns left with the "How it looks today" label;
-     extend right to make screens bigger */
-  margin-right: calc(-1 * clamp(20px, 8vw, 200px));
+  width: 100%;
+}
+.cs__today-caption {
+  font-family: var(--font-script);
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--c-primary);
+  text-align: center;
 }
 .cs__today-item {
   margin: 0;
@@ -296,10 +432,568 @@
   line-height: 1.2;
 }
 .cs__new-screens-desc {
-  font-size: clamp(15px, 1.3vw, 17px);
+  font-size: 18px;
   line-height: 1.55;
   color: var(--c-text);
   margin: 0;
+}
+/* Side-by-side row: text on the left, image(s) on the right.
+   Used in description arrays via `{ sideBySide: { text, images } }` */
+.cs__new-screens-sidebyside {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 2.4vw, 32px);
+  align-items: start;
+  margin: clamp(12px, 1.6vw, 20px) 0;
+}
+/* `flip: true` swaps text + image positions (image left, text right)
+   without changing DOM order, so screen-reader flow stays semantic */
+.cs__new-screens-sidebyside.is-flip > .cs__new-screens-sidebyside-text {
+  order: 2;
+}
+.cs__new-screens-sidebyside.is-flip > .cs__new-screens-sidebyside-images,
+.cs__new-screens-sidebyside.is-flip > .cs__sbs-stack {
+  order: 1;
+}
+.cs__new-screens-sidebyside-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cs__new-screens-sidebyside-text .cs__new-screens-desc {
+  margin: 0;
+  /* honor explicit `\n` in the text so authors can hard-break a line
+     to avoid awkward orphan words (e.g. push "and" to a new line) */
+  white-space: pre-line;
+}
+.cs__new-screens-sidebyside-images {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.2vw, 16px);
+}
+.cs__new-screens-sidebyside-img-btn {
+  display: block;
+  /* fixed 540×329 to match the design spec used across the case study */
+  width: 540px;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.cs__new-screens-sidebyside-img-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__new-screens-sidebyside-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__new-screens-sidebyside-img-btn img {
+  display: block;
+  width: 540px;
+  max-width: 100%;
+  height: 329px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+.cs__new-screens-sidebyside-img-btn:hover img {
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.18);
+}
+@media (max-width: 720px) {
+  .cs__new-screens-sidebyside {
+    grid-template-columns: 1fr;
+  }
+  /* Constrain side-by-side images to the viewport (their data sets
+   * `style="width: 585px"` inline — `!important` here wins over inline
+   * via specificity rules for !important). Also kill the per-image
+   * `transform: translate(offsetX, offsetY)` that the JSX applies for
+   * desktop staggering. */
+  .cs__new-screens-sidebyside-img-btn,
+  .cs__new-screens-sidebyside-img-btn img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  .cs__new-screens-sidebyside-img-btn {
+    transform: none !important;
+  }
+  .cs__new-screens-sidebyside-img-btn:hover {
+    transform: translateY(-2px) !important;
+  }
+  /* Stack variant: the 540×329 explicit size + translateX(60px) bleed
+   * pushes past the viewport. Collapse it to a proportional, in-flow
+   * card on mobile. Extra top margin gives the stack breathing room
+   * below the text that introduces it (overrides the desktop-only
+   * -50px nudge for certain stack instances). */
+  .cs__sbs-stack {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 540 / 329;
+    transform: none !important;
+    margin-top: 32px !important;
+  }
+  /* Back card's translate(28px, 22px) bleed pushes it off the right
+   * edge on a narrow viewport — pull it back so it stays in frame. */
+  .cs__sbs-stack-card.is-back {
+    transform: translate(12px, 14px) rotate(4deg) scale(0.94) !important;
+  }
+  .cs__sbs-stack-card.is-front {
+    transform: translate(0, 0) rotate(0deg) scale(1) !important;
+  }
+  .cs__sbs-stack-card img {
+    object-fit: cover;
+  }
+  /* Inline rows (one or two screenshots in a horizontal pair) — let
+   * each image scale down to fit the column instead of holding the
+   * desktop 540×329 size. The transform nudges that targeted specific
+   * screenshots also get zeroed so nothing bleeds past the viewport. */
+  .cs__new-screens-inline-row {
+    flex-wrap: wrap;
+  }
+  .cs__new-screens-inline-row-btn {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    transform: none !important;
+  }
+  .cs__new-screens-inline-row-btn:hover {
+    transform: translateY(-2px) !important;
+  }
+  .cs__new-screens-inline-row-btn img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  /* Preview row: kill the desktop nudge that pushes the second figure
+   * 100px right (and would push it off the viewport on mobile). The
+   * base rule below sits later in the file, so we need !important to
+   * actually win the cascade. */
+  .cs__new-screens-preview-row > .cs__new-screens-preview-figure:nth-child(2) {
+    transform: none !important;
+  }
+}
+
+/* ---------- SideBySide Variant A: Stack (layered auto-swap) ---------- */
+.cs__sbs-stack {
+  position: relative;
+  /* fixed 540×329 — explicit size for every card in the stack */
+  width: 540px;
+  height: 329px;
+  max-width: 100%;
+  /* nudge the stack to the right so it pulls toward the page edge —
+     the right side of each card will bleed past the column boundary */
+  transform: translateX(60px);
+}
+.cs__sbs-stack-card {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 14px;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.55s ease;
+}
+.cs__sbs-stack-card.is-front {
+  /* slightly larger so the front card visually dominates the stack */
+  transform: translate(0, 0) rotate(0deg) scale(1.08);
+  opacity: 1;
+}
+.cs__sbs-stack-card.is-back {
+  /* peek out behind and to the right + slight tilt so it reads as a
+     real card stack */
+  transform: translate(28px, 22px) rotate(4deg) scale(0.95);
+  opacity: 0.92;
+}
+.cs__sbs-stack-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.22);
+}
+.cs__sbs-stack-card:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+
+/* Inline screenshot inside a description — wrapped in a button so the
+   whole thing is keyboard/click-expandable into the lightbox */
+.cs__new-screens-inline-img-btn {
+  display: block;
+  /* match the per-image width of .cs__new-screens-inline-row — that row
+     is 120% of the column with a small gap split between 2 images,
+     so each image lands at ~60% of the column */
+  width: 60%;
+  margin: clamp(12px, 1.6vw, 20px) 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cs__new-screens-inline-img-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__new-screens-inline-img-btn:hover .cs__new-screens-inline-img {
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.18);
+}
+.cs__new-screens-inline-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__new-screens-inline-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+@media (max-width: 600px) {
+  .cs__new-screens-inline-img-btn {
+    width: 100%;
+  }
+}
+/* Two-or-more images sitting side-by-side in a single row (e.g. a pair
+   of related screens for one step). Each image shares the row width
+   equally; rounded + soft shadow to match the inline single image.
+   Row extends 20% past the text column on the RIGHT only — keeps the
+   left edge aligned with the body text */
+.cs__new-screens-inline-row {
+  display: flex;
+  gap: clamp(10px, 1.2vw, 18px);
+  margin: clamp(12px, 1.6vw, 20px) 0;
+}
+.cs__new-screens-inline-row-btn {
+  width: 540px;
+  flex: 0 0 540px;
+}
+/* NavCarousel — manual prev/next carousel inside a dotted-scene wrapper.
+ * Used by `gallery: true` description rows so 3+ wide screenshots can be
+ * stepped through one at a time. */
+.cs__navcarousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) clamp(40px, 5vw, 64px);
+  margin: clamp(12px, 1.6vw, 20px) 0;
+  border-radius: 18px;
+}
+/* Viewport clips the track; neighbours of the active slide peek in on
+ * the left and right edges. The viewport now fills the full width of
+ * the dotted carousel container, so the active slide can grow to the
+ * full dotted area. */
+.cs__navcarousel-viewport {
+  position: relative;
+  flex: 1 1 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.cs__navcarousel-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.cs__navcarousel-slide {
+  flex: 0 0 90%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Inactive slides fade so the eye lands on the active one. */
+  opacity: 0.45;
+  transform: scale(0.92);
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: opacity 0.35s ease, transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.cs__navcarousel-slide.is-active {
+  opacity: 1;
+  transform: scale(1);
+  cursor: zoom-in;
+  box-shadow: 0 20px 48px rgba(45, 51, 89, 0.22);
+}
+.cs__navcarousel-slide:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__navcarousel-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.cs__navcarousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 51, 89, 0.18);
+  background: #ffffff;
+  color: var(--c-text);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45, 51, 89, 0.12);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.cs__navcarousel-arrow--prev {
+  left: 16px;
+}
+.cs__navcarousel-arrow--next {
+  right: 16px;
+}
+.cs__navcarousel-arrow:hover:not(:disabled) {
+  background: #fcf1b5;
+  transform: translateY(-50%) scale(1.05);
+}
+.cs__navcarousel-arrow:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 3px;
+}
+.cs__navcarousel-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.cs__navcarousel-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.cs__navcarousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(45, 51, 89, 0.22);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.cs__navcarousel-dot.is-active {
+  background: var(--c-text);
+  transform: scale(1.2);
+}
+.cs__navcarousel-dot:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .cs__navcarousel {
+    padding: 20px 12px 36px;
+    gap: 6px;
+  }
+  .cs__navcarousel-arrow {
+    width: 36px;
+    height: 36px;
+  }
+}
+.cs__new-screens-inline-row-btn img {
+  width: 540px;
+  height: 329px;
+  object-fit: cover;
+}
+/* Nudge just the Skeep Intro Design image 20px right — targets it by
+   src attribute so it stays scoped to this specific image */
+.cs__new-screens-inline-row-btn:has(img[src*="skeep-intro-design"]) {
+  transform: translateX(20px);
+}
+.cs__new-screens-inline-row-btn:has(img[src*="skeep-intro-design"]):hover {
+  transform: translateX(20px) translateY(-2px);
+}
+.cs__new-screens-inline-row-btn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.cs__new-screens-inline-row-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__new-screens-inline-row-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__new-screens-inline-row-btn img,
+.cs__new-screens-inline-row > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+.cs__new-screens-inline-row-btn:hover img {
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.18);
+}
+/* Phone-frame screenshots get a thin neutral stroke so the frame edge
+ * reads clearly against the page bg. Scoped by image src so it only
+ * applies to the Scouts mobile screens. */
+.cs__new-screens-inline-row-btn img[src*="-mobile.webp"] {
+  border: 2px solid #dddddd;
+}
+/* On narrow screens, stack the row so each image stays readable */
+@media (max-width: 600px) {
+  .cs__new-screens-inline-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* "Preview on Website" — a label-only newScreens entry with two preview
+   images (mobile portrait + desktop landscape) sitting side by side */
+.cs__new-screens-label-block {
+  margin: 0 0 clamp(20px, 2vw, 28px);
+}
+/* The parent .cs__new-screens uses a flex `gap` of up to 80px between
+   every section. Pull the label-block UP by the full gap so it sits
+   flush against the section above (only for this block; other sections
+   keep the standard spacing). */
+.cs__new-screens > .cs__new-screens-label-block {
+  margin-top: clamp(-80px, -6vw, -48px);
+}
+.cs__new-screens-preview-row {
+  /* Grid keeps the two previews on ONE row at every viewport size.
+     Mobile gets a 1fr column (narrow), desktop gets 3fr (wide) so the
+     proportions match real-device aspect ratios. Top-aligned so the
+     two device frames sit on the same top edge. */
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: start;
+  gap: clamp(16px, 2vw, 28px);
+  margin-top: 24px;
+}
+.cs__new-screens-preview-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+/* Nudge the desktop preview (2nd figure) to the right so the
+   caption + screen sit slightly inset from the page edge */
+.cs__new-screens-preview-row > .cs__new-screens-preview-figure:nth-child(2) {
+  transform: translateX(100px);
+}
+.cs__new-screens-preview-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.cs__new-screens-preview-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__new-screens-preview-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__new-screens-preview-btn img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.cs__new-screens-preview-caption {
+  font-family: var(--font-script);
+  font-size: clamp(22px, 2.2vw, 28px);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--c-primary);
+  line-height: 1;
+}
+/* `#### Heading` — a level above bold-only subheads. Used to group a
+   block of items (e.g. "Key Actions" in the Skeep Home page section) */
+.cs__new-screens-section-head {
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 1.9vw, 26px);
+  font-weight: 400;
+  color: var(--c-primary);
+  margin: 40px 0 4px;
+  line-height: 1.2;
+}
+/* Extra breathing room when a `####` heading directly follows a
+   two-image inline row (Intro → Experience in the Skeep Editor section).
+   The heading + text shift down 40px, but pull the image column back up
+   the same amount so ONLY the title + copy appear to move. */
+.cs__new-screens-inline-row + .cs__new-screens-section-head {
+  margin-top: 90px;
+}
+.cs__new-screens-inline-row
+  + .cs__new-screens-section-head
+  + .cs__new-screens-sidebyside
+  .cs__sbs-stack,
+.cs__new-screens-inline-row
+  + .cs__new-screens-section-head
+  + .cs__new-screens-sidebyside
+  .cs__new-screens-sidebyside-images {
+  margin-top: -50px;
+}
+/* Bulleted list inside a description (e.g. "Embedded Page / Pop-up / …"
+   under Implementation Type). Same 6x6 cream-yellow dots as the problem
+   bullets but slightly smaller to fit body-density text */
+.cs__new-screens-bullets {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.55;
+  color: var(--c-text);
+}
+.cs__new-screens-bullets li {
+  position: relative;
+  padding-left: 18px;
+}
+.cs__new-screens-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fcf1b5;
+}
+/* Secondary line sitting right under a section title — same headline
+   serif as the title, but smaller and lighter so the hierarchy is clear */
+.cs__new-screens-subtitle {
+  font-family: var(--font-headline);
+  font-size: clamp(17px, 1.6vw, 21px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.3;
+  margin: -2px 0 0;
+  opacity: 0.85;
 }
 /* widen the text container so a long single-paragraph block (e.g. the
    IAA solution) fits on 2 lines instead of wrapping to 3 */
@@ -327,6 +1021,741 @@
   color: var(--c-primary);
   margin: 8px 0 0;
   line-height: 1.1;
+}
+
+/* ============================================================
+   Key Actions scroller (Skeep) — left column of script-font labels,
+   right column a sticky screenshot that swaps on scroll. The last item
+   cycles through multiple images on a 2s interval.
+   ============================================================ */
+.cs__keyactions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 4vw, 56px);
+  margin: clamp(20px, 3vw, 36px) 0;
+  align-items: flex-start;
+}
+
+/* Left column — wraps the pinned label stack AND the invisible
+   scroll-anchors that determine the section's scroll distance. */
+.cs__keyactions-left {
+  position: relative;
+}
+
+/* Pinned label stack — stays at the top of the viewport while the
+   anchors below it provide the scroll distance. All 6 labels remain
+   visible at all times; only the active one expands its body. */
+.cs__keyactions-pinned {
+  position: sticky;
+  top: 14vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* sit above the anchors in the stacking order */
+  z-index: 1;
+  /* smooth the layout shrink so it doesn't pop when we compress for
+     a tall active body */
+  transition: top 0.25s ease, gap 0.25s ease;
+}
+/* When the LAST item is active and its body is tall, pin the stack a
+   bit higher and tighten the gap between labels so the body has more
+   vertical room — but keep the labels at their normal size. */
+.cs__keyactions-pinned:has(.cs__keyactions-item.is-active:last-child) {
+  top: 3vh;
+  gap: 8px;
+}
+
+.cs__keyactions-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* leave room on the left for the per-item accent line */
+  padding-left: clamp(20px, 2.4vw, 32px);
+}
+/* Per-item short accent line — sits to the left of the label.
+   Default solid light gray (#DDDDDD); the active item turns cream-yellow. */
+.cs__keyactions-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  height: 36px;
+  width: 3px;
+  border-radius: 2px;
+  background: #dddddd;
+  opacity: 1;
+  transition: background 0.3s ease;
+}
+.cs__keyactions-item.is-active::before {
+  background: #fff5c1;
+}
+
+/* Invisible scroll-anchors — define the vertical scroll distance the
+   user must travel to walk through all 6 items. Kept compact so the
+   section doesn't get a huge empty tail below the pinned stack. */
+.cs__keyactions-anchors {
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  pointer-events: none;
+}
+.cs__keyactions-anchor {
+  /* 6 anchors × 8vh = ~48vh total scroll-driven distance below the
+     pinned stack — keeps the section compact while still giving each
+     item enough scroll to activate */
+  height: 8vh;
+}
+/* The last two items (Implementation Type & Products Mapping) both
+   have cycling images and longer bodies — give them dedicated scroll
+   distance so the user can read each without flying past it. */
+.cs__keyactions-anchor:nth-last-child(2) {
+  height: 30vh;
+}
+.cs__keyactions-anchor:last-child {
+  height: 50vh;
+}
+
+/* Button wrapper around the label name — strip default UA styling so
+   the click target reads exactly like the script-font heading did
+   before, but is keyboard-accessible (Tab to focus, Enter/Space). */
+.cs__keyactions-name-btn {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  /* tighten the click target so it hugs the label only, not the row */
+  width: fit-content;
+}
+.cs__keyactions-name-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.cs__keyactions-name {
+  font-family: var(--font-script);
+  font-size: 32px;
+  font-weight: 400;
+  color: #171a2d;
+  line-height: 1.1;
+  margin: 0;
+  /* keep long labels (e.g. "Implementation Type & Placement") on a
+     single line — the script font can extend slightly past the column
+     without breaking the visual hierarchy */
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+.cs__keyactions-item:not(.is-active) .cs__keyactions-name {
+  /* inactive titles: same navy at 50% opacity per the Figma spec */
+  opacity: 0.5;
+}
+
+.cs__keyactions-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s ease-out, margin-top 0.22s ease-out;
+  margin-top: 0;
+  overflow: hidden;
+}
+.cs__keyactions-item.is-active .cs__keyactions-body {
+  grid-template-rows: 1fr;
+  margin-top: 14px;
+}
+/* Inner wrapper is the single grid child — collapse fully when 0fr */
+.cs__keyactions-body-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cs__keyactions-desc {
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.6;
+  color: var(--c-text);
+  margin: 0 0 12px;
+}
+.cs__keyactions-desc:last-child {
+  margin-bottom: 0;
+}
+
+.cs__keyactions-bullets {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.55;
+  color: var(--c-text);
+}
+.cs__keyactions-bullets li {
+  position: relative;
+  padding-left: 18px;
+}
+.cs__keyactions-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fcf1b5;
+}
+
+/* Right column — sticks while the left column scrolls past.
+   `isolation: isolate` creates a stacking context so the ::before
+   circle can sit BEHIND the image (z-index: -1) without bleeding past
+   the sticky boundary. */
+.cs__keyactions-sticky {
+  position: sticky;
+  top: 14vh;
+  align-self: flex-start;
+  isolation: isolate;
+  transition: top 0.25s ease;
+}
+/* When the LAST item (Products Mapping) is active, slide the sticky
+   image + cream circle down so they visually align with the active
+   label at the bottom of the pinned stack. */
+.cs__keyactions:has(.cs__keyactions-item.is-active:last-child)
+  .cs__keyactions-sticky {
+  top: 28vh;
+}
+/* When Implementation Type & Placement (second-to-last) is active,
+   slide the sticky image + circle down a bit too — it's near the
+   bottom of the labels stack but not as far as Products Mapping. */
+.cs__keyactions:has(.cs__keyactions-item:nth-last-child(2).is-active)
+  .cs__keyactions-sticky {
+  top: 24vh;
+}
+/* Decorative cream-yellow circle behind the dashboard screenshot —
+   sized larger than the image so the screen reads as "sitting inside"
+   the circle, with the circle peeking out on every side. */
+.cs__keyactions-sticky::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  /* Center the circle behind the image and oversize it so it visually
+     frames the screen. Negative top/left/right offsets pull the circle
+     out past the column edges. */
+  top: calc(-15% - 30px);
+  left: calc(-5% + 190px);
+  right: calc(-5% - 190px);
+  width: 90%;
+  aspect-ratio: 1;
+  background: #fcf1b5;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cs__keyactions-img-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 16px;
+  overflow: hidden;
+  /* scaled 1.2× (20% bigger than the column) and nudged 60px right of
+     the column — right edge may bleed past the container edge */
+  transform: scale(1.2) translateX(60px);
+  transition: transform 0.2s ease;
+}
+.cs__keyactions-img-btn:hover {
+  transform: scale(1.2) translateX(60px) translateY(-2px);
+}
+.cs__keyactions-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+/* Cross-fade stack — all images render absolutely on top of each other;
+   only the active one has opacity 1. The first image (eagerly loaded)
+   defines the box dimensions via natural layout — the rest are stacked
+   absolutely over it. */
+.cs__keyactions-img-stack {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.cs__keyactions-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.14);
+  opacity: 0;
+  /* longer, smoother ease so the swap reads as a deliberate cross-fade */
+  transition: opacity 0.9s ease-in-out;
+}
+/* All images after the first sit absolutely over it so they share the
+   same box (the first image's natural size defines the container). */
+.cs__keyactions-img:not(:first-child) {
+  position: absolute;
+  inset: 0;
+}
+.cs__keyactions-img.is-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs__keyactions-img {
+    transition: none;
+  }
+  .cs__keyactions-item,
+  .cs__keyactions-body {
+    transition: none;
+  }
+}
+
+/* Inline screenshot (mobile-only) that lives inside each item, below
+   the description. Hidden on desktop — the sticky right column carries
+   the screenshot up there. */
+.cs__keyactions-inline-img-btn {
+  display: none;
+}
+
+/* Mobile / narrow viewports — flatten the layout: every item expanded,
+   its own screenshot rendered directly under its description, and the
+   sticky right column dropped entirely. */
+@media (max-width: 820px) {
+  .cs__keyactions {
+    grid-template-columns: 1fr;
+  }
+  /* Force the left column and each item to obey the container width —
+   * without `min-width: 0`, the inline screenshots' intrinsic width
+   * pushes the column out past the viewport. */
+  .cs__keyactions-left,
+  .cs__keyactions-pinned,
+  .cs__keyactions-item,
+  .cs__keyactions-body,
+  .cs__keyactions-body-inner,
+  .cs__keyactions-name-btn,
+  .cs__keyactions-name {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  /* Release the desktop `white-space: nowrap` so long labels (e.g.
+   * "Implementation Type & Placement") wrap to a second line instead
+   * of pushing the column past the viewport. */
+  .cs__keyactions-name {
+    white-space: normal;
+    font-size: 28px;
+  }
+  /* on mobile we don't pin the stack — the right image stacks below */
+  .cs__keyactions-pinned {
+    position: static;
+  }
+  /* hide the scroll-anchors entirely on mobile — activation is purely
+     based on which item the user has scrolled into view */
+  .cs__keyactions-anchors {
+    display: none;
+  }
+  /* Drop the sticky screenshot column entirely — each item now carries
+   * its own inline screenshot below the description. */
+  .cs__keyactions-sticky {
+    display: none;
+  }
+  /* Show every item's body, regardless of activation state, so the
+   * description AND screenshot read together. */
+  .cs__keyactions-body {
+    grid-template-rows: 1fr;
+    margin-top: 14px;
+  }
+  /* Restore inactive name brightness — the section is no longer
+   * "scroll-driven", every item is shown in full. */
+  .cs__keyactions-item:not(.is-active) .cs__keyactions-name {
+    opacity: 1;
+    color: var(--c-text);
+  }
+  /* Inline screenshot reveal + sizing. */
+  .cs__keyactions-inline-img-btn {
+    display: block;
+    margin-top: 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 28px rgba(45, 51, 89, 0.18);
+  }
+  .cs__keyactions-inline-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .cs__keyactions-inline-img-btn:focus-visible {
+    outline: 2px solid var(--c-primary);
+    outline-offset: 4px;
+  }
+  /* Add a separator + breathing room between items so they don't run
+   * together visually. */
+  .cs__keyactions-item + .cs__keyactions-item {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(45, 51, 89, 0.12);
+  }
+}
+
+/* ============================================================
+   Step layouts — 'rows' (default) and 'stepper'
+   .cs__steps + .cs__steps--{rows|stepper}
+   ============================================================ */
+
+/* ---------- Shared step content (works for all variants) ---------- */
+.cs__steps {
+  margin: clamp(16px, 2vw, 24px) 0;
+}
+.cs__step {
+  /* shared content container for tabs/stepper (rows overrides this) */
+  display: block;
+}
+.cs__step-name {
+  font-family: var(--font-headline);
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+.cs__step-desc {
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.6;
+  color: var(--c-text);
+  margin: 0 0 12px;
+}
+.cs__step-desc:last-of-type {
+  margin-bottom: 16px;
+}
+
+/* image button — single image, 60% wide, click-to-expand */
+.cs__step-img-btn {
+  display: block;
+  width: 60%;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.cs__step-img-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__step-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__step-img-btn img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+.cs__step-img-btn:hover img {
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.18);
+}
+
+/* row of 2+ image buttons — side-by-side by default (tabs/stepper) */
+.cs__step-img-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: clamp(10px, 1.2vw, 18px);
+  width: 100%;
+  margin: 8px 0 0;
+}
+.cs__step-img-row .cs__step-img-btn {
+  width: 100%;
+  margin: 0;
+}
+
+/* fade-in when the active step content swaps in tabs/stepper */
+@keyframes cs-step-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cs__step--active {
+  animation: cs-step-fade-in 0.25s ease-out;
+}
+
+/* stepper variant keeps the single-image at 60% column-width */
+.cs__steps--stepper .cs__step-img-btn {
+  width: 60%;
+}
+
+/* ---------- VARIANT B: alternating two-column rows ---------- */
+.cs__steps--rows {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 72px);
+}
+.cs__steps--rows .cs__step {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+/* flip every other row — image on left, text on right */
+.cs__steps--rows .cs__step--flip .cs__step-body {
+  order: 2;
+}
+.cs__steps--rows .cs__step--flip .cs__step-images {
+  order: 1;
+}
+.cs__steps--rows .cs__step-body {
+  display: flex;
+  flex-direction: column;
+}
+/* images fill their column in rows variant */
+.cs__steps--rows .cs__step-img-btn {
+  width: 100%;
+  margin: 0;
+}
+.cs__steps--rows .cs__step-img-row {
+  gap: 12px;
+}
+/* Single-image rows (Branding / Content / Product Mapping) — lock to
+   exactly 528×323 to match the design spec and the Setup gallery tiles.
+   The `>` selector targets only standalone buttons, NOT those nested
+   inside a row group or gallery scene. */
+.cs__steps--rows .cs__step-images > .cs__step-img-btn {
+  width: 528px;
+  max-width: 100%;
+}
+.cs__steps--rows .cs__step-images > .cs__step-img-btn img {
+  width: 528px;
+  max-width: 100%;
+  height: 323px;
+  object-fit: cover;
+}
+/* When a step has 2+ images placed side-by-side in a row, break out of
+   the 2-column text|image layout — stack text on top and let the image
+   row span the full content column. */
+.cs__steps--rows .cs__step:has(.cs__step-img-row) {
+  display: block;
+}
+.cs__steps--rows .cs__step:has(.cs__step-img-row) .cs__step-body {
+  margin-bottom: 14px;
+}
+.cs__steps--rows .cs__step:has(.cs__step-img-row) .cs__step-images {
+  /* 110% so each of the 3 Setup images reads ~10% bigger (the extra
+     10% bleeds past the right edge of the text column) */
+  width: 110%;
+}
+
+/* Optional second image floated on top of a step screenshot — e.g. a
+   color-picker phone overlapping the desktop branding screen. Sized
+   relative to the parent button so it scales with the underlying image. */
+.cs__step-img-btn--has-overlay {
+  position: relative;
+  overflow: visible;
+}
+/* Bump specificity to win over `.cs__step-img-btn img { width: 100% }`
+   (that rule is `class + element` so it beats a bare `.class` selector;
+   nesting under the button class adds the specificity we need.) */
+.cs__step-img-btn .cs__step-img-overlay {
+  position: absolute;
+  /* positioned over the "Text" column color swatches in the upper-right
+     area of the desktop branding screen */
+  top: calc(18% + 50px);
+  right: calc(42% + 40px);
+  width: 13%;
+  height: auto;
+  z-index: 2;
+  border-radius: 18px;
+  pointer-events: none;
+  /* override the shadow inherited from `.cs__step-img-btn img` */
+  box-shadow: none;
+}
+/* also kill the hover-state shadow on the overlay (the parent button's
+   :hover img rule has higher specificity than the base override above) */
+.cs__step-img-btn:hover .cs__step-img-overlay {
+  box-shadow: none;
+}
+
+/* When a step uses layout: 'gallery' (auto-scrolling carousel), also
+   break out of the 2-column layout so the gallery can full-bleed and
+   the text reads as a single header above it. */
+.cs__steps--rows .cs__step:has(.cs__step-gallery-scene) {
+  display: block;
+}
+.cs__steps--rows .cs__step:has(.cs__step-gallery-scene) .cs__step-body {
+  margin-bottom: 14px;
+}
+.cs__steps--rows .cs__step:has(.cs__step-gallery-scene) .cs__step-images {
+  width: 100%;
+}
+/* margin to push the gallery clear of the description copy above */
+.cs__step-gallery-scene {
+  margin-top: 8px;
+}
+/* Onboarding "gallery" — now a fixed-size 585×355 cross-fade cycle that
+   shows ONE image at a time, swapping every 3s. The whole thing is a
+   single click-to-expand button. */
+.cs__step-img-cycle {
+  position: relative;
+  display: block;
+  width: 585px;
+  max-width: 100%;
+  height: 355px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(45, 51, 89, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cs__step-img-cycle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.18);
+}
+.cs__step-img-cycle:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.cs__step-img-cycle-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+.cs__step-img-cycle-img.is-visible {
+  opacity: 1;
+}
+@media (max-width: 768px) {
+  .cs__step-gallery-scene .gallery__btn img {
+    height: 220px;
+  }
+}
+/* Cancel the AutoGallery's full-viewport breakout — contain it within
+   the section's content column so it doesn't run edge-to-edge. */
+.cs__step-gallery-scene .gallery {
+  width: 100%;
+  margin-left: 0;
+}
+/* mobile: collapse to single column, text always above image */
+@media (max-width: 720px) {
+  .cs__steps--rows .cs__step {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .cs__steps--rows .cs__step--flip .cs__step-body {
+    order: 1;
+  }
+  .cs__steps--rows .cs__step--flip .cs__step-images {
+    order: 2;
+  }
+}
+
+/* ---------- VARIANT C: horizontal numbered stepper ---------- */
+.cs__stepper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: clamp(24px, 3vw, 40px);
+  /* small inset so first/last connector lines don't bleed past container */
+  padding: 0 clamp(8px, 1vw, 16px);
+}
+.cs__stepper-step {
+  /* each step is a flex column: circle on top, name underneath */
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+.cs__stepper-step:not(.is-active) {
+  opacity: 0.55;
+}
+.cs__stepper-step:hover {
+  opacity: 1;
+}
+.cs__stepper-step:focus-visible {
+  outline: none;
+}
+.cs__stepper-step:focus-visible .cs__stepper-num {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 3px;
+}
+/* connector line between consecutive circles — drawn on each step
+   except the last, from right-of-this-circle to left-of-next-circle */
+.cs__stepper-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 24px;             /* aligns with center of 48px circle */
+  left: calc(50% + 28px); /* 28px past this circle's center */
+  width: calc(100% - 56px);
+  height: 2px;
+  background: var(--c-primary-line);
+  z-index: 0;
+}
+.cs__stepper-num {
+  position: relative;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-white);
+  border: 2px solid var(--c-primary-line);
+  color: var(--c-primary);
+  font-family: var(--font-headline);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.cs__stepper-step.is-active .cs__stepper-num {
+  background: #fcf1b5;
+  border-color: #fcf1b5;
+  transform: scale(1.08);
+}
+.cs__stepper-name {
+  font-family: var(--font-headline);
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 400;
+  color: var(--c-primary);
+  text-align: center;
+  line-height: 1.2;
+}
+/* mobile: smaller circles, names wrap below */
+@media (max-width: 600px) {
+  .cs__stepper-num {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+  .cs__stepper-step:not(:last-child)::after {
+    top: 18px;
+    left: calc(50% + 22px);
+    width: calc(100% - 44px);
+  }
+  .cs__stepper-name {
+    font-size: 12px;
+  }
 }
 
 /* Pill tabs (e.g. "Request shifts" / "Exchange shift" under a section title) */
@@ -444,14 +1873,25 @@ main:has(.cs__next-band) + footer {
 }
 
 @media (max-width: 640px) {
+  /* Keep the band on a single horizontal line on mobile; shrink the
+   * type and the gap so the label + project name fit beside each
+   * other instead of stacking. */
   .cs__next-band-inner {
-    flex-direction: column;
-    align-items: flex-start;
     gap: 12px;
   }
+  .cs__next-label {
+    font-size: 15px;
+    flex: 0 0 auto;
+  }
   .cs__next-project {
-    max-width: 100%;
-    text-align: left;
+    font-size: 13px;
+    gap: 6px;
+    max-width: none;
+    text-align: end;
+  }
+  .cs__next-project svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -460,4 +1900,670 @@ main:has(.cs__next-band) + footer {
 }
 .cs--missing .cs__back {
   justify-content: center;
+}
+
+/* ================================================================
+ * Onboarding steps — NEW variants (Option D / E / F) + compare mode
+ * ================================================================ */
+
+/* Compare mode: stack the 3 new variants with big labels so the user
+   can scroll through and pick a winner. Temporary scaffold — remove
+   after the user picks one. */
+.cs__steps-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  margin-top: 16px;
+}
+.cs__steps-compare-block {
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px dashed rgba(45, 51, 89, 0.18);
+  border-radius: 18px;
+}
+.cs__steps-compare-label {
+  margin: 0 0 20px;
+  font-family: var(--font-headline);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 400;
+  color: var(--c-primary);
+  line-height: 1.2;
+}
+
+/* ---------- Option D — Tabs (pill row, single-focus) ---------- */
+.cs__steps--tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.cs__steps-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cs__steps-tab {
+  font-family: var(--font-body);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 51, 89, 0.18);
+  background: #fff;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+.cs__steps-tab:hover {
+  border-color: var(--c-primary);
+}
+.cs__steps-tab.is-active {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: #fff;
+}
+
+/* ---------- Option E — Vertical Timeline (all visible) ---------- */
+.cs__steps--timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* line continues across rows */
+}
+.cs__timeline-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: clamp(20px, 2.4vw, 32px);
+  align-items: start;
+}
+.cs__timeline-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  gap: 0;
+}
+.cs__timeline-node {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fcf1b5;
+  color: var(--c-primary);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-headline);
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(45, 51, 89, 0.08);
+}
+.cs__timeline-line {
+  width: 2px;
+  flex: 1 1 auto;
+  min-height: 24px;
+  background: linear-gradient(180deg, rgba(45, 51, 89, 0.22), rgba(45, 51, 89, 0.06));
+  margin-top: 8px;
+}
+.cs__timeline-content {
+  padding-bottom: 48px; /* breathing room before the next row's node */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cs__timeline-content .cs__step-name {
+  margin-bottom: 4px;
+}
+.cs__timeline-content .cs__step-img-btn,
+.cs__timeline-content .cs__step-img-row {
+  margin-top: 12px;
+}
+
+/* ---------- Timeline E2 — Big handwritten numbers (no circles) ---------- */
+.cs__steps--timeline-script .cs__timeline-row {
+  grid-template-columns: 100px 1fr;
+}
+.cs__steps--timeline-script .cs__timeline-spine {
+  align-items: flex-start;
+}
+.cs__timeline-script-num {
+  font-family: var(--font-script);
+  font-size: clamp(56px, 6vw, 84px);
+  line-height: 0.85;
+  color: var(--c-primary);
+  letter-spacing: -0.02em;
+}
+.cs__steps--timeline-script .cs__timeline-line {
+  width: 2px;
+  margin-top: 12px;
+  background: linear-gradient(180deg, rgba(45, 51, 89, 0.22), rgba(45, 51, 89, 0.06));
+}
+.cs__steps--timeline-script .cs__timeline-content {
+  padding-top: 18px; /* vertically nudge content to align with script number baseline */
+}
+
+/* ---------- Timeline E3 — Alternating zigzag (central spine) ----------
+   Break out of the 1160px container so the spine sits at exact viewport
+   center. Each row is a 3-col grid (text | spine | image) with both
+   sides equal-width so the visual mass balances around the spine. */
+.cs__steps--timeline-zigzag {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* Break out of .container's max-width and center on the viewport */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.cs__zigzag-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+  align-items: start;
+  padding-bottom: 0; /* spine line continues straight into next row */
+  /* Row spans the full viewport but the inner edges line up with the
+     .container so the step headings stay flush with the "Onboarding"
+     section title (container max-width 1160px + 24px gutter). */
+  padding-left: max(24px, calc((100vw - 1160px) / 2 + 24px));
+  padding-right: max(24px, calc((100vw - 1160px) / 2 + 24px));
+}
+.cs__zigzag-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 48px; /* breathing room only around content cells */
+  min-width: 0;
+}
+.cs__zigzag-content {
+  text-align: left;
+  align-items: stretch;
+  max-width: 520px;
+  justify-self: end;
+}
+.cs__zigzag-content .cs__step-name,
+.cs__zigzag-content .cs__step-desc {
+  width: 100%;
+  text-align: left;
+}
+.cs__zigzag-image {
+  text-align: left;
+  align-items: stretch;
+  max-width: 520px;
+  justify-self: start;
+}
+
+/* ---------- Per-row scroll-reveal animation ----------
+   Each row stays "closed" (text + image hidden, pill muted) until its
+   center reaches the viewport center; then it "opens" with a soft
+   fade + slide-in from the spine. */
+.cs__zigzag-row .cs__zigzag-content,
+.cs__zigzag-row .cs__zigzag-image {
+  transition:
+    opacity 0.55s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.cs__zigzag-row.is-closed .cs__zigzag-content {
+  opacity: 0;
+  transform: translateX(40px); /* slide in toward spine from the right */
+  pointer-events: none;
+}
+.cs__zigzag-row.is-closed .cs__zigzag-image {
+  opacity: 0;
+  transform: translateX(-40px); /* slide in toward spine from the left */
+  pointer-events: none;
+}
+/* Flipped rows: text on the right, image on the left — swap directions */
+.cs__zigzag-row.is-flip.is-closed .cs__zigzag-content {
+  transform: translateX(-40px);
+}
+.cs__zigzag-row.is-flip.is-closed .cs__zigzag-image {
+  transform: translateX(40px);
+}
+.cs__zigzag-row.is-open .cs__zigzag-content,
+.cs__zigzag-row.is-open .cs__zigzag-image {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* The pill itself stays in place (so the spine stays continuous),
+   but it's muted while closed and lights up when the row opens. */
+.cs__zigzag-row .cs__timeline-node {
+  transition:
+    border-color 0.4s ease,
+    color 0.4s ease,
+    background 0.4s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+.cs__zigzag-row.is-closed .cs__timeline-node {
+  opacity: 0.42;
+  transform: scale(0.94);
+}
+.cs__zigzag-row.is-open .cs__timeline-node {
+  opacity: 1;
+  transform: scale(1);
+}
+.cs__zigzag-row.is-closed .cs__timeline-node--pill {
+  background: #fff;
+  border-color: rgba(45, 51, 89, 0.35);
+}
+.cs__zigzag-row.is-open .cs__timeline-node--pill {
+  background: #ffffff;
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cs__zigzag-row.is-flip .cs__zigzag-content {
+  order: 3;
+  text-align: left;
+  align-items: stretch;
+  justify-self: start;
+}
+.cs__zigzag-row.is-flip .cs__zigzag-image {
+  order: 1;
+  text-align: right;
+  align-items: stretch;
+  justify-self: end;
+}
+/* Nudge ONLY the flipped image buttons (Branding + Product Mapping)
+   60px to the left. Applied to the inner button so it doesn't
+   conflict with the row's scroll-reveal transform on the cell. */
+.cs__zigzag-row.is-flip .cs__zigzag-image .cs__step-img-btn {
+  transform: translateX(-60px);
+}
+.cs__zigzag-row.is-flip .cs__zigzag-spine {
+  order: 2;
+}
+.cs__zigzag-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+}
+/* The line fills whatever space is left in the spine column AFTER the
+   node — and because the row has zero bottom padding the next row's
+   node sits flush against the end of this line, forming one
+   continuous timeline visually. */
+.cs__zigzag-spine .cs__timeline-line {
+  flex: 1 1 auto;
+  width: 2px;
+  min-height: 60px;
+  background: linear-gradient(180deg, rgba(45, 51, 89, 0.22), rgba(45, 51, 89, 0.06));
+}
+
+/* ---------- Spine Variant S1 — Bold cream badge ----------
+   Large, brand-colored badge with a soft halo and a solid line. */
+.cs__timeline-node--bold {
+  width: 68px;
+  height: 68px;
+  background: #fcf1b5;
+  color: var(--c-primary);
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: 20px;
+  box-shadow:
+    0 8px 22px rgba(45, 51, 89, 0.12),
+    inset 0 0 0 1px rgba(45, 51, 89, 0.08);
+  position: relative;
+}
+.cs__timeline-node--bold::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(252, 241, 181, 0.55);
+  pointer-events: none;
+}
+.cs__timeline-line--bold {
+  width: 3px !important;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 51, 89, 0.45),
+    rgba(45, 51, 89, 0.18)
+  ) !important;
+  border-radius: 999px;
+}
+
+/* ---------- Spine Variant S2 — Outlined ring + dashed line ----------
+   Cleaner, blueprint-style: white center, primary outline, dashed connector. */
+.cs__timeline-node--ring {
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  color: var(--c-primary);
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 16px;
+  border: 2px solid var(--c-primary);
+  box-shadow: none;
+  position: relative;
+}
+.cs__timeline-node--ring::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(45, 51, 89, 0.18);
+  pointer-events: none;
+}
+.cs__timeline-line--ring {
+  width: 0 !important;
+  background: transparent !important;
+  border-left: 2px dashed rgba(45, 51, 89, 0.32);
+  margin-top: 6px;
+}
+
+/* ---------- Spine Variant S3 — Pill marker with "STEP" label ----------
+   Vertical pill capsule with tiny "STEP" caps + big number.
+   Outlined / blueprint look (S2 palette): white fill, primary-color
+   border, halo ring outside, dashed connector. */
+.cs__timeline-node--pill {
+  width: 52px;
+  height: 84px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-primary);
+  border: 2px solid var(--c-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: none;
+  padding: 10px 0;
+  position: relative;
+}
+.cs__timeline-node--pill::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 51, 89, 0.18);
+  pointer-events: none;
+}
+.cs__timeline-pill-label {
+  font-family: var(--font-body, inherit);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  line-height: 1;
+}
+.cs__timeline-pill-num {
+  font-family: var(--font-headline);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.cs__timeline-line--pill {
+  width: 0 !important;
+  background: transparent !important;
+  border-left: 2px dashed rgba(45, 51, 89, 0.32);
+  margin-top: 6px;
+}
+
+/* ---------- Compare-spines layout ----------
+   3 abbreviated zigzag previews side-by-side so the user can pick. */
+.cs__spine-compare {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  /* Cancel the parent timeline-zigzag full-viewport break-out: keep this
+     comparison block inside the container so the 3 columns sit together. */
+}
+.cs__spine-compare-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(45, 51, 89, 0.03);
+  border: 1px solid rgba(45, 51, 89, 0.08);
+  border-radius: 12px;
+  padding: 18px 12px 24px;
+}
+/* Inside the compare preview: do NOT break out of the container, and
+   shrink the row paddings + columns so 3 fit side-by-side cleanly. */
+.cs__steps--spine-preview {
+  width: auto !important;
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.cs__steps--spine-preview .cs__zigzag-row {
+  grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr);
+  gap: 8px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.cs__steps--spine-preview .cs__zigzag-side {
+  padding-bottom: 28px;
+  max-width: none;
+}
+.cs__steps--spine-preview .cs__step-name {
+  font-size: 14px;
+  line-height: 1.25;
+  margin: 0;
+}
+.cs__steps--spine-preview .cs__zigzag-image {
+  /* preview has no image — still reserve symmetric space */
+  min-height: 1px;
+}
+@media (max-width: 820px) {
+  .cs__spine-compare {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .cs__zigzag-row {
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+  }
+  .cs__zigzag-row .cs__zigzag-content,
+  .cs__zigzag-row.is-flip .cs__zigzag-content {
+    order: 2;
+    text-align: left;
+    grid-column: 2;
+  }
+  .cs__zigzag-row .cs__zigzag-image,
+  .cs__zigzag-row.is-flip .cs__zigzag-image {
+    order: 3;
+    text-align: left;
+    grid-column: 2;
+    min-width: 0;
+  }
+  .cs__zigzag-spine,
+  .cs__zigzag-row.is-flip .cs__zigzag-spine {
+    order: 1;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  /* Step screenshots carry inline width/height from data — override
+   * them on mobile so they fit the column instead of overflowing the
+   * viewport. */
+  .cs__zigzag-row .cs__step-img-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .cs__zigzag-row .cs__step-img-btn img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  /* Image-cycle (rotating screenshots) — its base CSS sets a fixed
+   * 585×355 size that overflows the column on mobile. Reset both the
+   * cycle and its grid-item parent so the cycle adopts the column's
+   * width with a proportional height. Override the desktop
+   * `justify-self: start/end` so the grid items stretch to fill the
+   * narrow column on mobile — otherwise they shrink to 0 once the
+   * inner cycle's width: 100% can't resolve against an auto-sized
+   * parent. */
+  .cs__zigzag-row .cs__zigzag-content,
+  .cs__zigzag-row .cs__zigzag-image {
+    min-width: 0;
+    max-width: 100%;
+    justify-self: stretch;
+  }
+  .cs__zigzag-row .cs__step-img-cycle {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 585 / 355;
+  }
+  .cs__zigzag-row .cs__step-img-cycle-img {
+    object-fit: cover;
+  }
+  /* Side-by-side image rows inside a single step collapse to a
+   * horizontal scroll so each screenshot stays at a readable size. */
+  .cs__zigzag-row .cs__step-img-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    margin-inline: -4px;
+    padding: 4px;
+    scrollbar-width: none;
+  }
+  .cs__zigzag-row .cs__step-img-row::-webkit-scrollbar {
+    display: none;
+  }
+  .cs__zigzag-row .cs__step-img-row .cs__step-img-btn {
+    flex: 0 0 80% !important;
+    width: 80% !important;
+    scroll-snap-align: start;
+  }
+  /* Tighten the pill node so it fits the narrower spine column. */
+  .cs__zigzag-row .cs__timeline-node--pill {
+    transform: scale(0.78);
+    transform-origin: top left;
+  }
+}
+
+/* ---------- Option F — Cards Grid (2×2 overview) ---------- */
+.cs__steps--cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 2.4vw, 32px);
+}
+.cs__card-step {
+  background: #fff;
+  border: 1px solid rgba(45, 51, 89, 0.08);
+  border-radius: 16px;
+  padding: clamp(20px, 2vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 10px 28px rgba(45, 51, 89, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cs__card-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(45, 51, 89, 0.1);
+}
+.cs__card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.cs__card-num {
+  font-family: var(--font-script);
+  font-size: clamp(40px, 4vw, 56px);
+  color: var(--c-primary);
+  line-height: 0.9;
+}
+.cs__card-name {
+  margin: 0;
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 1.8vw, 24px);
+  color: var(--c-primary);
+}
+.cs__card-img {
+  margin-top: auto;
+}
+.cs__card-img .cs__step-img-btn img,
+.cs__card-img .cs__step-img-row img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+@media (max-width: 720px) {
+  .cs__steps--cards {
+    grid-template-columns: 1fr;
+  }
+  .cs__timeline-row {
+    grid-template-columns: 56px 1fr;
+  }
+  .cs__timeline-node {
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+}
+
+/* Interactive-demo CTA (Israeli Scouts case study) */
+.cs__demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 36px 0 8px;
+  padding: 24px 28px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #367757, #2b5f46);
+  color: #fff;
+}
+.cs__demo--bottom {
+  margin-top: 90px;
+}
+.cs__demo-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fdbe30;
+  margin-bottom: 6px;
+}
+.cs__demo-note {
+  margin: 0;
+  max-width: none;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .cs__demo-note {
+    white-space: normal;
+  }
+}
+.cs__demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: #fdbe30;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+.cs__demo-btn:hover {
+  background: #ffcb52;
+}
+.cs__demo-btn:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 640px) {
+  .cs__demo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cs__demo-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

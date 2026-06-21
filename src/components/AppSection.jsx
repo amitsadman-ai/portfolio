@@ -65,11 +65,43 @@ export default function AppSection({ app, onExpand }) {
       <Reveal className="app__block">
         <span className="app__label">The problem</span>
         {Array.isArray(problem) ? (
-          problem.map((p, i) => (
-            <p key={i} className="app__text">
-              {p}
-            </p>
-          ))
+          problem.map((p, i) => {
+            // an object with { image } becomes an inline screenshot
+            // that opens the lightbox when clicked
+            if (typeof p === 'object' && p !== null && p.image) {
+              return (
+                <button
+                  type="button"
+                  key={i}
+                  className="app__inline-img-btn"
+                  onClick={() => onExpand && onExpand(p.image)}
+                  aria-label={`Expand ${p.alt || 'screenshot'}`}
+                >
+                  <img
+                    className="app__inline-img"
+                    src={p.image}
+                    alt={p.alt || ''}
+                    loading="lazy"
+                  />
+                </button>
+              )
+            }
+            // an object with { bullets } becomes a bulleted list
+            if (typeof p === 'object' && p !== null && Array.isArray(p.bullets)) {
+              return (
+                <ul key={i} className="app__problem-bullets">
+                  {p.bullets.map((b, k) => (
+                    <li key={k}>{b}</li>
+                  ))}
+                </ul>
+              )
+            }
+            return (
+              <p key={i} className="app__text">
+                {p}
+              </p>
+            )
+          })
         ) : (
           <p className="app__text">{problem}</p>
         )}

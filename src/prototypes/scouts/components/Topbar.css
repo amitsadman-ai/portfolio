@@ -1,0 +1,126 @@
+.s-topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 36px;
+  background: #fff;
+  border-bottom: 1px solid var(--s-line);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.s-topbar__menu {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--s-ink);
+}
+
+.s-topbar__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+
+.s-topbar__actions {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.s-topbar__icon,
+.s-topbar__cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--s-bg);
+  color: var(--s-green);
+  transition: background 0.15s ease;
+}
+.s-topbar__icon:hover,
+.s-topbar__cart:hover {
+  background: var(--s-green-soft);
+}
+
+/* Language picker dropdown anchored under the globe icon. */
+.s-topbar__lang {
+  position: relative;
+}
+.s-topbar__lang-menu {
+  position: absolute;
+  inset-block-start: calc(100% + 6px);
+  inset-inline-end: 0;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: 10px;
+  box-shadow: var(--s-shadow-lg, 0 12px 28px rgba(0, 0, 0, 0.12));
+  min-width: 160px;
+  z-index: 50;
+}
+.s-topbar__lang-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--s-ink);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.s-topbar__lang-option:hover {
+  background: var(--s-green-soft);
+}
+.s-topbar__lang-option.is-active {
+  font-weight: 700;
+  color: var(--s-green);
+}
+
+.s-topbar__badge {
+  position: absolute;
+  inset-block-start: -3px;
+  inset-inline-start: -3px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #fdbe30;
+  color: #000000;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .s-topbar__menu {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .s-topbar {
+    padding: 14px 16px;
+  }
+  .s-topbar__title {
+    font-size: 16px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}
