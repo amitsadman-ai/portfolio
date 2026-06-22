@@ -14,7 +14,7 @@ body:has(.about) .bg-layer::after {
 /* ---------- Hero: photo + intro ---------- */
 .about__hero {
   display: grid;
-  grid-template-columns: clamp(264px, 33.6vw, 432px) 1fr;
+  grid-template-columns: clamp(240px, 22vw, 320px) 1fr;
   grid-template-rows: auto 1fr;
   gap: clamp(28px, 5vw, 0px);
   /* center the photo vertically with the text instead of sticking to the
@@ -62,6 +62,32 @@ body:has(.about) .bg-layer::after {
   line-height: 1.6;
   color: var(--c-text);
   margin: 0;
+}
+.about__goals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.about__goal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Oooh Baby', cursive;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.about__goal-icon {
+  flex: 0 0 28px;
+  font-family: system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ---------- Experience ---------- */

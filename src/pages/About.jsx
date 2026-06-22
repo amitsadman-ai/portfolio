@@ -73,24 +73,30 @@ export default function About() {
           </div>
           <div className="about__intro">
             <p className="about__text">
-              I&apos;m a Product Designer with over 4 years of experience creating
-              intuitive, user-centered digital experiences. I enjoy turning
-              complex workflows into simple, engaging solutions that help users
-              achieve their goals with ease. Throughout my career, I&apos;ve
-              worked on a variety of products, taking ideas from initial
-              research and discovery through prototyping, testing, and
-              pixel-perfect execution.
+              As you&apos;ve probably noticed, I&apos;m a big pistachio lover.
+              I&apos;m also a mom to a one-year-old and enjoy spending time
+              with family. Outside of design, I have three goals:
             </p>
+            <ul className="about__goals">
+              <li className="about__goal">
+                <span className="about__goal-icon" aria-hidden="true">🎹</span>
+                <span>Learning piano</span>
+              </li>
+              <li className="about__goal">
+                <span className="about__goal-icon" aria-hidden="true">🧏🏽</span>
+                <span>Learning sign language</span>
+              </li>
+              <li className="about__goal">
+                <span className="about__goal-icon" aria-hidden="true">🌌</span>
+                <span>Seeing the Northern Lights in Lapland</span>
+              </li>
+            </ul>
             <p className="about__text">
-              I combine a strong attention to detail with a creative and
-              problem-solving mindset, always looking for ways to improve both
-              the user experience and business outcomes. With advanced
-              expertise in Figma, including design systems, components,
-              auto-layouts, and interactive prototypes, I thrive in
-              collaborative environments and enjoy working closely with
-              cross-functional teams to bring ideas to life. I&apos;m
-              constantly seeking new challenges, opportunities to grow, and
-              ways to create meaningful products that make a real impact.
+              I&apos;m a Product Designer with 4+ years of experience turning
+              complex problems into intuitive digital experiences. I enjoy
+              uncovering user needs, challenging assumptions, and working
+              closely with teams to create products that are both useful and
+              impactful.
             </p>
           </div>
         </Reveal>
