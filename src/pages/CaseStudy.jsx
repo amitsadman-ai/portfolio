@@ -386,15 +386,27 @@ export default function CaseStudy() {
       </section>
 
       {nextProject && (
-        <Link className="cs__next-band" to={`/work/${nextProject.slug}`}>
-          <div className="cs__next-band-inner container">
-            <span className="cs__next-label">Next up</span>
-            <span className="cs__next-project">
-              {nextProject.shortName || nextProject.title}
-              <ArrowRight size={20} />
-            </span>
+        nextProject.comingSoon ? (
+          <div className="cs__next-band cs__next-band--disabled" aria-disabled="true">
+            <div className="cs__next-band-inner container">
+              <span className="cs__next-label">Next up</span>
+              <span className="cs__next-project">
+                {nextProject.shortName || nextProject.title}
+                <span className="cs__next-coming-soon">Coming soon</span>
+              </span>
+            </div>
           </div>
-        </Link>
+        ) : (
+          <Link className="cs__next-band" to={`/work/${nextProject.slug}`}>
+            <div className="cs__next-band-inner container">
+              <span className="cs__next-label">Next up</span>
+              <span className="cs__next-project">
+                {nextProject.shortName || nextProject.title}
+                <ArrowRight size={20} />
+              </span>
+            </div>
+          </Link>
+        )
       )}
     </>
   )

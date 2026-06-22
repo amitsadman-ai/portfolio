@@ -1871,6 +1871,22 @@ main:has(.cs__next-band) + footer {
 .cs__next-band:hover .cs__next-project {
   gap: 18px;
 }
+.cs__next-band--disabled {
+  cursor: default;
+}
+.cs__next-band--disabled:hover .cs__next-project {
+  gap: 12px;
+}
+.cs__next-coming-soon {
+  font-family: 'Oooh Baby', cursive;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--c-text);
+  background: rgba(221, 221, 221, 0.8);
+  padding: 4px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 
 @media (max-width: 640px) {
   /* Keep the band on a single horizontal line on mobile; shrink the
