@@ -147,8 +147,7 @@ export default function Header() {
           <a
             className="header__link header__resume"
             href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
+            download="Amit Mittlman - CV.pdf"
             onClick={() => setOpen(false)}
           >
             Resume
