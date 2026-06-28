@@ -14,14 +14,13 @@
 
   <text x="60" y="74" font-family="'Caveat','Segoe Script',cursive" font-size="44" font-weight="500" fill="#1d2433">Amit Mittlman</text>
 
-  <text x="600" y="240" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" fill="#1a1f33">Big challenges create</text>
-  <text x="600" y="320" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" fill="#1a1f33">opportunities to lead, learn</text>
-  <text x="600" y="400" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" fill="#1a1f33">&amp; make meaningful impact.</text>
+  <text x="600" y="240" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-weight="700" fill="#1a1f33">Some people think I'm obsessed with Figma.</text>
+  <text x="600" y="306" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-weight="700" fill="#1a1f33">I'm actually obsessed with pistachios.</text>
 
-  <text x="600" y="470" text-anchor="middle" font-family="'Caveat','Segoe Script',cursive" font-size="32" font-weight="500" fill="#3b4a66">Hey there, I'm Amit —</text>
-  <text x="600" y="510" text-anchor="middle" font-family="-apple-system, 'Helvetica Neue', sans-serif" font-size="22" fill="#3b4a66">Product Designer · 4+ years building solutions for today and tomorrow.</text>
+  <text x="600" y="402" text-anchor="middle" font-family="'Caveat','Segoe Script',cursive" font-size="36" font-weight="500" fill="#3b4a66">Hey there, I'm Amit —</text>
+  <text x="600" y="446" text-anchor="middle" font-family="-apple-system, 'Helvetica Neue', sans-serif" font-size="22" fill="#3b4a66">Product Designer · 4+ years building solutions for today and tomorrow.</text>
 
-  <g transform="translate(490, 555)">
+  <g transform="translate(490, 500)">
     <rect width="220" height="48" rx="24" fill="#fdeea7" stroke="#f5d878" stroke-width="1"/>
     <text x="110" y="31" text-anchor="middle" font-family="-apple-system, 'Helvetica Neue', sans-serif" font-size="18" font-weight="500" fill="#1a1f33">Fun fact about me</text>
   </g>
