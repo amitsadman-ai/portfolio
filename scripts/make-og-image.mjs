@@ -3,6 +3,33 @@
 import sharp from 'sharp'
 import { writeFileSync } from 'fs'
 
+/* Pack a set of square PNG buffers into a multi-resolution ICO file. */
+async function pngsToIco(pngBuffers, sizes) {
+  const headerSize = 6 + sizes.length * 16
+  const total = pngBuffers.reduce((s, b) => s + b.length, 0)
+  const ico = Buffer.alloc(headerSize + total)
+  ico.writeUInt16LE(0, 0)
+  ico.writeUInt16LE(1, 2)
+  ico.writeUInt16LE(sizes.length, 4)
+  let offset = headerSize
+  for (let i = 0; i < sizes.length; i++) {
+    const s = sizes[i]
+    const buf = pngBuffers[i]
+    const eo = 6 + i * 16
+    ico.writeUInt8(s === 256 ? 0 : s, eo)
+    ico.writeUInt8(s === 256 ? 0 : s, eo + 1)
+    ico.writeUInt8(0, eo + 2)
+    ico.writeUInt8(0, eo + 3)
+    ico.writeUInt16LE(1, eo + 4)
+    ico.writeUInt16LE(32, eo + 6)
+    ico.writeUInt32LE(buf.length, eo + 8)
+    ico.writeUInt32LE(offset, eo + 12)
+    buf.copy(ico, offset)
+    offset += buf.length
+  }
+  return ico
+}
+
 const W = 1200
 const H = 630
 
@@ -50,5 +77,14 @@ await sharp(Buffer.from(FAV))
   .png()
   .toFile('public/assets/favicon.png')
 
+/* Real favicon.ico at the site root — browsers auto-request /favicon.ico
+ * and Netlify's SPA redirect would otherwise serve index.html for it. */
+const icoSizes = [16, 32, 48]
+const icoPngs = await Promise.all(
+  icoSizes.map((s) => sharp(Buffer.from(FAV)).resize(s, s).png().toBuffer()),
+)
+writeFileSync('public/favicon.ico', await pngsToIco(icoPngs, icoSizes))
+
 console.log('Wrote public/assets/og-image.png (1200x630)')
 console.log('Wrote public/assets/favicon.png (256x256)')
+console.log('Wrote public/favicon.ico (16/32/48)')
