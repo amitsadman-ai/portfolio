@@ -29,9 +29,6 @@
     0 24px 60px rgba(45, 51, 89, 0.12);
 }
 .card--disabled .card__cta {
-  font-family: 'Oooh Baby', cursive;
-  font-style: normal;
-  font-size: 1.25rem;
   color: var(--c-text);
   background: rgba(221, 221, 221, 0.8);
 }

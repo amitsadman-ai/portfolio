@@ -13,7 +13,7 @@ export default function FunFact() {
         aria-expanded={revealed}
       >
         <Sparkles size={16} />
-        Another Fan fact about me
+        Another fan fact about me
       </button>
 
       {revealed && (
