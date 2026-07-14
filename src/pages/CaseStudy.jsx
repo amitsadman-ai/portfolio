@@ -213,14 +213,22 @@ export default function CaseStudy() {
                       {today.map((item, i) => {
                         const src = typeof item === 'string' ? item : item.src
                         const caption = typeof item === 'object' ? item.title : null
+                        const alt = caption || `${title} — current screen ${i + 1}`
                         return (
                           <figure key={i} className="cs__today-item">
-                            <img
-                              className="cs__today-img"
-                              src={src}
-                              alt={caption || `${title} — current screen ${i + 1}`}
-                              loading="lazy"
-                            />
+                            <button
+                              type="button"
+                              className="cs__today-img-btn"
+                              onClick={() => setLightbox(src)}
+                              aria-label={`Expand ${alt}`}
+                            >
+                              <img
+                                className="cs__today-img"
+                                src={src}
+                                alt={alt}
+                                loading="lazy"
+                              />
+                            </button>
                             {caption && (
                               <figcaption className="cs__today-title">{caption}</figcaption>
                             )}

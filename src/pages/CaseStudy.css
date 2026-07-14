@@ -238,6 +238,23 @@
   align-items: center;
   gap: 14px;
 }
+.cs__today-img-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+.cs__today-img-btn:hover {
+  transform: translateY(-2px);
+}
+.cs__today-img-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
 .cs__today-img {
   display: block;
   width: 100%;
