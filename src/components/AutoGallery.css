@@ -33,6 +33,10 @@
 .gallery:hover .gallery__track {
   animation-play-state: paused;
 }
+/* Freeze the auto-scroll while a lightbox is open in front of it. */
+body.lightbox-open .gallery__track {
+  animation-play-state: paused;
+}
 
 @keyframes gallery-scroll {
   from {

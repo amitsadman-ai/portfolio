@@ -80,8 +80,14 @@ export default function CaseStudy() {
   const bannerAspect = activeApp?.bannerAspect ?? projectBannerAspect ?? '1800 / 318'
   const bannerFit = activeApp?.bannerFit ?? projectBannerFit ?? 'cover'
   const bannerOffsetY = activeApp?.bannerOffsetY ?? projectBannerOffsetY ?? 0
-  // Lightbox for non-apps case studies that have a gallery
+  // Lightbox for non-apps case studies. Holds { images, index } so galleries
+  // can step through their whole set with prev/next; single-image callers pass
+  // one src and it opens without arrows.
   const [lightbox, setLightbox] = useState(null)
+  const openLightbox = (imgOrList, index = 0) => {
+    const images = Array.isArray(imgOrList) ? imgOrList : [imgOrList]
+    setLightbox({ images, index })
+  }
 
   return (
     <>
@@ -219,7 +225,7 @@ export default function CaseStudy() {
                             <button
                               type="button"
                               className="cs__today-img-btn"
-                              onClick={() => setLightbox(src)}
+                              onClick={() => openLightbox(src)}
                               aria-label={`Expand ${alt}`}
                             >
                               <img
@@ -308,7 +314,7 @@ export default function CaseStudy() {
                 <button
                   type="button"
                   className="cs__solution-img-btn"
-                  onClick={() => setLightbox(solutionImage)}
+                  onClick={() => openLightbox(solutionImage)}
                   aria-label={`Expand ${solutionImageAlt || 'solution image'}`}
                 >
                   <img
@@ -335,7 +341,7 @@ export default function CaseStudy() {
                     key={i}
                     section={section}
                     projectTitle={title}
-                    onExpand={setLightbox}
+                    onExpand={openLightbox}
                   />
                 ))}
               </div>
@@ -365,7 +371,7 @@ export default function CaseStudy() {
               {gallery.length > 0 && (
                 <AutoGallery
                   images={gallery}
-                  onExpand={setLightbox}
+                  onExpand={openLightbox}
                   label={`${title} new screens`}
                 />
               )}
@@ -389,7 +395,13 @@ export default function CaseStudy() {
               ))}
             </Reveal>
           )}
-          {!apps && <Lightbox src={lightbox} onClose={() => setLightbox(null)} />}
+          {!apps && (
+            <Lightbox
+              images={lightbox?.images}
+              index={lightbox?.index}
+              onClose={() => setLightbox(null)}
+            />
+          )}
         </div>
       </section>
 

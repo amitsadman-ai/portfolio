@@ -26,7 +26,7 @@ export default function AutoGallery({ images = [], onExpand, label = 'screens' }
               <button
                 type="button"
                 className="gallery__btn"
-                onClick={() => onExpand(src)}
+                onClick={() => onExpand(images, i % images.length)}
                 tabIndex={clone ? -1 : 0}
                 aria-label={`Expand ${label} ${indexInSet}`}
               >
