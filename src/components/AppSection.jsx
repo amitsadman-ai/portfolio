@@ -112,13 +112,20 @@ export default function AppSection({ app, onExpand }) {
           <span className="app__label">How it looks today</span>
           <div className="app__today">
             {today.map((src, i) => (
-              <img
+              <button
                 key={i}
-                className="app__today-img"
-                src={src}
-                alt={`${name} — current screen ${i + 1}`}
-                loading="lazy"
-              />
+                type="button"
+                className="app__today-btn"
+                onClick={() => onExpand?.(today, i)}
+                aria-label={`Expand ${name} — current screen ${i + 1}`}
+              >
+                <img
+                  className="app__today-img"
+                  src={src}
+                  alt={`${name} — current screen ${i + 1}`}
+                  loading="lazy"
+                />
+              </button>
             ))}
           </div>
         </Reveal>

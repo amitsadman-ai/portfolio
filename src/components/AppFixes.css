@@ -250,12 +250,33 @@
   overflow-x: auto;
   padding-bottom: 6px;
 }
-.app__today-img {
+.app__today-btn {
   flex: 0 0 auto;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s ease;
+}
+.app__today-btn:hover {
+  transform: translateY(-3px);
+}
+.app__today-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+.app__today-img {
+  display: block;
   height: 470px;
   width: auto;
   border-radius: var(--radius-sm);
   box-shadow: 0 10px 30px rgba(45, 51, 89, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+.app__today-btn:hover .app__today-img {
+  box-shadow: 0 16px 40px rgba(45, 51, 89, 0.16);
 }
 
 /* ---- CTA (mirrors homepage .card__cta) ---- */

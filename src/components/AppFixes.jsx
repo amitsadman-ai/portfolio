@@ -8,7 +8,13 @@ export default function AppFixes({ apps, activeIndex, onActiveChange }) {
   const [internalTab, setInternalTab] = useState(0)
   const activeTab = activeIndex ?? internalTab
   const setActiveTab = onActiveChange ?? setInternalTab
+  // Holds { images, index } so galleries can step through their set with
+  // prev/next; single-image callers pass one src and open without arrows.
   const [lightbox, setLightbox] = useState(null)
+  const openLightbox = (imgOrList, index = 0) => {
+    const images = Array.isArray(imgOrList) ? imgOrList : [imgOrList]
+    setLightbox({ images, index })
+  }
   const active = apps[activeTab]
 
   return (
@@ -29,10 +35,14 @@ export default function AppFixes({ apps, activeIndex, onActiveChange }) {
       </div>
 
       <div className="appfix__sections">
-        <AppSection key={active.name} app={active} onExpand={setLightbox} />
+        <AppSection key={active.name} app={active} onExpand={openLightbox} />
       </div>
 
-      <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
+      <Lightbox
+        images={lightbox?.images}
+        index={lightbox?.index}
+        onClose={() => setLightbox(null)}
+      />
     </div>
   )
 }
