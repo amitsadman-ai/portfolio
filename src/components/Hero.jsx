@@ -1,4 +1,3 @@
-import FunFact from './FunFact'
 import PistachioRain from './PistachioRain'
 import './Hero.css'
 
@@ -35,7 +34,6 @@ export default function Hero() {
             solutions that address today's needs while anticipating tomorrow's challenges.
           </span>
         </p>
-        <FunFact />
       </div>
     </section>
   )

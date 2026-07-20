@@ -39,7 +39,7 @@ body:has(.about) .bg-layer::after {
   border-radius: 20px;
   position: relative;
   z-index: 1;
-  transform: translateX(-30px);
+  transform: translateX(-30px) translateY(-20px);
 }
 
 
@@ -88,6 +88,28 @@ body:has(.about) .bg-layer::after {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Fun-fact pill lives in the About intro — align it to the left edge of
+   the text column instead of centered. */
+.about__intro .funfact {
+  align-items: flex-start;
+  position: relative;
+  margin-top: 24px;
+}
+/* On desktop the photo is vertically centered against this text column, so
+   revealing the answer would grow the column and nudge the photo down. Float
+   the answer as an overlay instead, so the layout height stays fixed and the
+   photo doesn't move when the CTA is clicked. (On mobile the photo sits above
+   the text, so an in-flow answer causes no shift — leave it in flow there.) */
+@media (min-width: 821px) {
+  .about__intro .funfact__answer {
+    position: absolute;
+    top: calc(100% + 12px);
+    inset-inline-start: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
 }
 
 /* ---------- Experience ---------- */

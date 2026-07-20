@@ -14,7 +14,7 @@ export default function PhoneRow({ images, label, onExpand }) {
             key={i}
             type="button"
             className="phone-row__phone"
-            onClick={() => onExpand?.(src)}
+            onClick={() => onExpand?.(images, i)}
             aria-label={`${label} — screen ${i + 1}`}
           >
             <img src={src} alt="" loading="lazy" />

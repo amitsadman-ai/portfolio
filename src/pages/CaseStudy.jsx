@@ -8,6 +8,7 @@ import Reveal from '../components/Reveal'
 import AutoGallery from '../components/AutoGallery'
 import PhoneScene from '../components/PhoneScene'
 import NewScreensSection from '../components/NewScreensSection'
+import EvolutionTimeline from '../components/EvolutionTimeline'
 import Lightbox from '../components/Lightbox'
 import Typewriter from '../components/Typewriter'
 import Questionnaire from '../components/Questionnaire'
@@ -70,7 +71,7 @@ export default function CaseStudy() {
     )
   }
 
-  const { tag, title, body, logos, csBody, csTagline, apps, problem, problemLabel, today, todayLabel, todayCaption, todayDesktop, todayDesktopCaption, research, solution, solutionLabel, solutionImage, solutionImageAlt, questionnaire, gallery, newScreens, screensLabel, reflection, banner, bannerShift: projectBannerShift, bannerAspect: projectBannerAspect, bannerFit: projectBannerFit, bannerOffsetY: projectBannerOffsetY, extraSections } = project
+  const { tag, title, body, logos, csBody, csTagline, apps, problem, problemLabel, today, todayLabel, todayCaption, todayDesktop, todayDesktopCaption, research, solution, solutionLabel, solutionImage, solutionImageAlt, questionnaire, gallery, evolution, newScreens, screensLabel, reflection, banner, bannerShift: projectBannerShift, bannerAspect: projectBannerAspect, bannerFit: projectBannerFit, bannerOffsetY: projectBannerOffsetY, extraSections } = project
   const screensLabelText = screensLabel || 'New screens'
   const paragraphs = csBody || [body]
   // Per-app banner falls back to the project-level banner (for non-apps case studies)
@@ -330,6 +331,16 @@ export default function CaseStudy() {
           {!apps && questionnaire && (
             <Reveal className="app__block">
               <Questionnaire data={questionnaire} />
+            </Reveal>
+          )}
+          {!apps && evolution && (
+            <Reveal className="app__block">
+              <span className="app__label">{evolution.label || "The App's Evolution"}</span>
+              <EvolutionTimeline
+                data={evolution}
+                onExpand={openLightbox}
+                projectTitle={title}
+              />
             </Reveal>
           )}
           {!apps && newScreens && newScreens.length > 0 && (

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Reveal from '../components/Reveal'
+import FunFact from '../components/FunFact'
 import './About.css'
 
 /* Soft skills shown as a continuously-scrolling pill row */
@@ -98,6 +99,7 @@ export default function About() {
               closely with teams to create products that are both useful and
               impactful.
             </p>
+            <FunFact />
           </div>
         </Reveal>
 

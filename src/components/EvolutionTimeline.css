@@ -1,0 +1,192 @@
+.cs__evo {
+  position: relative;
+  margin-top: clamp(8px, 1.6vw, 16px);
+}
+
+/* Horizontal timeline rail sitting behind the year markers. */
+.cs__evo-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 13px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 51, 89, 0.28),
+    rgba(45, 51, 89, 0.12)
+  );
+  border-radius: 999px;
+}
+
+.cs__evo-cols {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 260px);
+  gap: clamp(16px, 2.4vw, 32px);
+  align-items: start;
+}
+
+/* ---- milestone header (year + caption) ---- */
+.cs__evo-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 20px;
+  padding-top: 22px; /* clears the rail dot above */
+  position: relative;
+}
+.cs__evo-head::before {
+  /* the dot on the rail */
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--c-primary);
+}
+.cs__evo-year {
+  font-family: var(--font-headline);
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--c-primary);
+  letter-spacing: -0.01em;
+}
+.cs__evo-cap {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-muted, #64708a);
+}
+
+/* ---- 2021 pipeline: an auto-running strip of early concepts ---- */
+.cs__evo-pipeline {
+  overflow: hidden;
+  padding: 6px 0 14px;
+  /* fade the strip in/out at the edges so screens enter and leave softly */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 5%,
+    #000 95%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 5%,
+    #000 95%,
+    transparent
+  );
+}
+.cs__evo-pipeline-track {
+  display: flex;
+  width: max-content;
+  animation-name: evo-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+/* pause so the user can grab a screen — on hover, or while a lightbox is open */
+.cs__evo-pipeline:hover .cs__evo-pipeline-track,
+body.lightbox-open .cs__evo-pipeline-track {
+  animation-play-state: paused;
+}
+@keyframes evo-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---- phone thumbnail button ---- */
+.cs__evo-phone {
+  flex: 0 0 auto;
+  width: 240px;
+  /* margin (not gap) so the duplicated set tiles seamlessly at -50% */
+  margin-right: clamp(10px, 1.2vw, 16px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 14px;
+  transition: transform 0.2s ease;
+}
+.cs__evo-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(45, 51, 89, 0.14);
+  transition: box-shadow 0.2s ease;
+}
+.cs__evo-phone:hover {
+  transform: translateY(-3px);
+}
+.cs__evo-phone:hover img {
+  box-shadow: 0 16px 36px rgba(45, 51, 89, 0.2);
+}
+.cs__evo-phone:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 4px;
+}
+
+/* the destination phone reads larger — it's where the story lands */
+.cs__evo-phone--final {
+  width: 100%;
+  max-width: 240px;
+}
+
+/* ---- arrow between the two milestones ---- */
+.cs__evo-arrow {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px; /* roughly center against the phone rows */
+}
+.cs__evo-arrow-img {
+  display: block;
+  width: clamp(56px, 6vw, 84px);
+  height: auto;
+}
+
+/* ---- responsive: stack the milestones on narrow screens ---- */
+@media (max-width: 720px) {
+  .cs__evo-track {
+    display: none;
+  }
+  .cs__evo-cols {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .cs__evo-arrow {
+    margin: 4px 0;
+    transform: rotate(90deg);
+  }
+  .cs__evo-head {
+    padding-top: 0;
+  }
+  .cs__evo-head::before {
+    display: none;
+  }
+  .cs__evo-phone--final {
+    max-width: 200px;
+  }
+}
+
+/* Respect reduced-motion: stop the auto-run and let users scroll manually. */
+@media (prefers-reduced-motion: reduce) {
+  .cs__evo-pipeline {
+    overflow-x: auto;
+  }
+  .cs__evo-pipeline-track {
+    animation: none;
+  }
+}

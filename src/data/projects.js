@@ -196,6 +196,26 @@ export const projects = [
       ],
     },
     solution: 'The concept was born from a clear employee need: a simpler and more efficient way to manage shift requests, improve communication with HR, and provide greater flexibility and control over work schedules.',
+    evolution: {
+      label: "The App's Evolution",
+      start: '2021',
+      end: '2026',
+      startCaption: 'Early concepts (Version 1.0)',
+      endCaption: 'Today (version 2.0)',
+      early: [
+        '/assets/iaa-old-1.webp',
+        '/assets/iaa-old-3.webp',
+        '/assets/iaa-old-4.webp',
+        '/assets/iaa-old-5.webp',
+        '/assets/iaa-old-6.webp',
+        '/assets/iaa-old-7.webp',
+        '/assets/iaa-old-8.webp',
+        '/assets/iaa-old-9.webp',
+        '/assets/iaa-old-10.webp',
+      ],
+      final: '/assets/iaa-old-2.webp',
+    },
+    screensLabel: 'New screens (Version 2.0.1)',
     newScreens: [
       {
         title: 'Login + Home page',

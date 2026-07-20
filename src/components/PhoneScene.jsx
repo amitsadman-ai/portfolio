@@ -24,7 +24,7 @@ export default function PhoneScene({
             key={i}
             type="button"
             className={`phone-scene__phone phone-scene__phone--${i}`}
-            onClick={() => onExpand?.(src)}
+            onClick={() => onExpand?.(images, i)}
             aria-label={`${label} — screen ${i + 1}`}
           >
             <img src={src} alt="" loading="lazy" />
