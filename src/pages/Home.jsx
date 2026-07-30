@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Hero from '../components/Hero'
 import Toolkit from '../components/Toolkit'
 import ProjectsRail from '../components/ProjectsRail'
-import ProjectsSection from '../components/ProjectsSection'
 import './Home.css'
-
-const DESKTOP_MQ = '(min-width: 861px)'
 
 /* Curated homepage subset — merges Fast/Self Learner and drops Creativity &
  * Teamwork so the pills sit on two lines. The About page keeps the full SKILLS. */
@@ -36,16 +33,6 @@ function SkillPills() {
 
 export default function Home() {
   const location = useLocation()
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(DESKTOP_MQ).matches,
-  )
-
-  useEffect(() => {
-    const mq = window.matchMedia(DESKTOP_MQ)
-    const onChange = () => setIsDesktop(mq.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
 
   useEffect(() => {
     const id = location.state?.scrollTo
@@ -59,23 +46,18 @@ export default function Home() {
   return (
     <>
       <span id="about" className="anchor-about" aria-hidden="true" />
-      {isDesktop ? (
-        <div className="home-split">
-          <aside className="home-split__left">
-            <Hero pistachios={false} />
-            <Toolkit />
-            <SkillPills />
-          </aside>
-          <section id="work" className="home-split__right">
-            <ProjectsRail />
-          </section>
-        </div>
-      ) : (
-        <>
-          <Hero />
-          <ProjectsSection />
-        </>
-      )}
+      {/* One layout for every width: a two-column sticky split on desktop that
+          collapses to a single stacked column on mobile (see Home.css). */}
+      <div className="home-split">
+        <aside className="home-split__left">
+          <Hero pistachios={false} />
+          <Toolkit />
+          <SkillPills />
+        </aside>
+        <section id="work" className="home-split__right">
+          <ProjectsRail />
+        </section>
+      </div>
     </>
   )
 }

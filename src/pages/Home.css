@@ -1,6 +1,7 @@
-/* Desktop-only split homepage (rendered at ≥861px). Left intro panel is
-   sticky; the right project rail scrolls past it. This whole subtree isn't
-   rendered below 861px, so mobile keeps the existing stacked layout. */
+/* Split homepage. Desktop (≥861px): a two-column layout — the left intro
+   panel is sticky while the right project rail scrolls past it. Mobile
+   (≤860px): collapses to a single stacked column (see the media query at
+   the bottom of this file). */
 .home-split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -47,6 +48,9 @@
    desktop no-wrap spans, which are sized for the full-width hero) */
 .home-split__left .hero__sub {
   max-width: none;
+  /* the split container already pads the sides, so drop the old mobile
+     hero's inline padding that was indenting the subtitle past the title */
+  padding-inline: 0;
   /* no pistachio pile on desktop, so don't wait for it — fade in right
      after the title instead of the mobile 3s hold */
   animation-delay: 0.2s;
@@ -95,4 +99,25 @@
   line-height: 1.2;
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(45, 51, 89, 0.06);
+}
+
+/* Mobile: collapse the split into one stacked column. Nothing is sticky;
+   the intro panel (hero → toolkit → pills) stacks above the project rail. */
+@media (max-width: 860px) {
+  .home-split {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: clamp(20px, 4vh, 40px) 20px 0;
+  }
+  .home-split__left {
+    position: static;
+    top: auto;
+  }
+  .home-split__left .hero__title {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+  /* no big desktop offset — sit the toolkit right under the hero */
+  .home-split__left .toolkit {
+    margin-top: clamp(24px, 5vh, 40px);
+  }
 }

@@ -121,6 +121,13 @@
   opacity: 1;
   transform: translateY(0);
 }
+/* touch has no hover — show the title on the image at all times on mobile */
+@media (max-width: 860px) {
+  .rail__title--overlay {
+    opacity: 1;
+    transform: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .rail__title,
   .rail__title--overlay {
