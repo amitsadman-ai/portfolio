@@ -1,0 +1,98 @@
+/* Desktop-only split homepage (rendered at ≥861px). Left intro panel is
+   sticky; the right project rail scrolls past it. This whole subtree isn't
+   rendered below 861px, so mobile keeps the existing stacked layout. */
+.home-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 72px);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(24px, 4vh, 56px) 24px 0;
+  align-items: start;
+}
+
+.home-split__left {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-split__right {
+  min-width: 0;
+}
+
+/* Fit the hero into the left column: drop its full-viewport centering,
+   left-align it, and pin the title's top edge to the top of the column so
+   it lines up with the top of the first project card on the right. Scoped
+   to the split, so the mobile Hero is untouched. */
+.home-split__left .hero {
+  min-height: auto;
+  padding: 0;
+}
+.home-split__left .hero__inner {
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  align-items: flex-start;
+  text-align: left;
+}
+.home-split__left .hero__title {
+  font-size: 40px;
+  margin-top: 0;
+  padding-top: 0;
+}
+/* let the subtitle wrap inside the narrower column (release the hero's
+   desktop no-wrap spans, which are sized for the full-width hero) */
+.home-split__left .hero__sub {
+  max-width: none;
+  /* no pistachio pile on desktop, so don't wait for it — fade in right
+     after the title instead of the mobile 3s hold */
+  animation-delay: 0.2s;
+}
+.home-split__left .hero__greeting {
+  animation-delay: 0.8s;
+}
+.home-split__left .hero__sub .hero__nowrap {
+  white-space: normal;
+}
+
+/* push the toolkit + skill pills block down the left panel */
+.home-split__left .toolkit {
+  margin-top: calc(clamp(28px, 4vh, 48px) + 150px);
+}
+
+/* skill pills at the bottom of the left panel */
+.home-pills {
+  margin-top: clamp(28px, 4vh, 48px);
+}
+.home-pills__title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--c-primary);
+  margin: 0 0 16px;
+}
+/* static wrapped skill pills */
+.home-pills__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.home-pill {
+  flex: 0 0 auto;
+  padding: 5px 13px;
+  border-radius: 999px;
+  background: #dcebfb;
+  color: #0c447c;
+  font-family: var(--font-script);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(45, 51, 89, 0.06);
+}

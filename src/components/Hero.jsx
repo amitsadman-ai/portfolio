@@ -1,7 +1,7 @@
 import PistachioRain from './PistachioRain'
 import './Hero.css'
 
-export default function Hero() {
+export default function Hero({ pistachios = true }) {
   return (
     <section id="hero" className="hero">
       <div className="container hero__inner">
@@ -9,23 +9,29 @@ export default function Hero() {
           Some people think I'm obsessed with Figma.
           <br />
           I'm actually{' '}
-          <span className="hero__perched">
-            obsessed
-            <img
-              className="hero__perched-img"
-              src="/assets/pistachio-shell.webp"
-              alt=""
-              aria-hidden="true"
-            />
-          </span>{' '}
+          {pistachios ? (
+            <span className="hero__perched">
+              obsessed
+              <img
+                className="hero__perched-img"
+                src="/assets/pistachio-shell.webp"
+                alt=""
+                aria-hidden="true"
+              />
+            </span>
+          ) : (
+            'obsessed'
+          )}{' '}
           <span className="hero__nowrap">with pistachios.</span>
         </h1>
         {/* Pile sits behind the title via z-index. The rain layer itself
             extends well above the hero, so pistachios appear to fall
             from the sky into a pile that comes to rest under the title. */}
-        <div className="hero__pile-zone">
-          <PistachioRain />
-        </div>
+        {pistachios && (
+          <div className="hero__pile-zone">
+            <PistachioRain />
+          </div>
+        )}
         <p className="hero__sub">
           <span className="hero__greeting">Hey there, I'm Amit</span> — a Product Designer
           with{' '}

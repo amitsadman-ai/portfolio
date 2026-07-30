@@ -6,7 +6,9 @@ export default function Footer() {
   return (
     <footer className="footer" id="contact">
       <div className="container footer__inner">
-        <h2 className="footer__title">Let's Keep in Touch</h2>
+        <h2 className="footer__title">
+          Curiosity isn't just encouraged — it's rewarded.
+        </h2>
 
         <ul className="footer__list">
           <li>

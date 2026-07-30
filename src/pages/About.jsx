@@ -1,20 +1,8 @@
 import { useEffect } from 'react'
 import Reveal from '../components/Reveal'
 import FunFact from '../components/FunFact'
+import { SKILLS } from '../data/skills'
 import './About.css'
-
-/* Soft skills shown as a continuously-scrolling pill row */
-const SKILLS = [
-  'Time Management',
-  'Multitasking',
-  'Fast Learner',
-  'Creativity',
-  'Problem Solving',
-  'Leadership & responsibility',
-  'Ability to work under pressure',
-  'Teamwork',
-  'Self-Learner',
-]
 
 /* Placeholder experience entries — replace with real history. */
 const EXPERIENCE = [

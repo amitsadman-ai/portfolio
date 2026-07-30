@@ -1,0 +1,144 @@
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2vw, 32px);
+}
+
+.rail__card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--c-primary-line);
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 20px 50px rgba(45, 51, 89, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.rail__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 30px 66px rgba(45, 51, 89, 0.16);
+}
+
+/* scroll-in entrance: cards slide in from alternating sides. The JS adds
+   .is-in when a card enters the viewport, then .is-settled on animationend
+   (which clears the animation so the hover lift keeps working). */
+@media (prefers-reduced-motion: no-preference) {
+  .rail__card {
+    opacity: 0;
+  }
+  .rail__card.is-in {
+    animation: rail-slide-right 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .rail__card.is-settled {
+    animation: none;
+    opacity: 1;
+  }
+}
+@keyframes rail-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(52px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rail__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 12;
+  border-radius: calc(var(--radius) - 6px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eef3fb, #dde7f5);
+}
+.rail__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+/* tag row pinned to the top-left of the image */
+.rail__badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rail__tag {
+  display: inline-block;
+  font-size: var(--fs-tag);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--c-text);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.rail__title {
+  margin: 14px 0 0;
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.2;
+  color: var(--c-text);
+  transition: opacity 0.25s ease;
+}
+/* title overlaid on the image, revealed on hover */
+.rail__title--overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 44px 16px 16px;
+  color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(23, 26, 45, 0.78),
+    rgba(23, 26, 45, 0)
+  );
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.rail__card:hover .rail__title--overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail__title,
+  .rail__title--overlay {
+    transition: none;
+  }
+}
+
+/* coming-soon card — non-clickable */
+.rail__card--soon {
+  cursor: default;
+}
+.rail__card--soon:hover {
+  transform: none;
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 20px 50px rgba(45, 51, 89, 0.1);
+}
+/* "Coming soon.." pill sits next to the tag, same size */
+.rail__tag--soon {
+  color: var(--c-primary);
+  background: rgba(221, 221, 221, 0.85);
+}
