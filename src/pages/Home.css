@@ -89,8 +89,8 @@
   border-radius: 999px;
   background: #dcebfb;
   color: #0c447c;
-  font-family: var(--font-script);
-  font-size: 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.2;
   white-space: nowrap;
