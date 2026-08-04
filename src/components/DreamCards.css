@@ -1,0 +1,57 @@
+/* ==============================================
+   DreamCards — a deck tucked behind the reply that
+   opens into a row on click
+   ============================================== */
+.dreamdeck {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0;
+}
+
+.fan-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 114px;
+  height: 152px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 30px rgba(45, 51, 89, 0.24);
+  cursor: pointer;
+  /* re-enable pointer events (the behind wrapper is click-through) */
+  pointer-events: auto;
+  /* GSAP drives transform/opacity; start hidden to avoid a pre-anim flash */
+  opacity: 0;
+  will-change: transform;
+  outline: none;
+}
+.fan-card::after {
+  /* subtle inner hairline so the cards read as physical cards */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+.fan-card:focus-visible {
+  box-shadow: 0 12px 30px rgba(45, 51, 89, 0.24), 0 0 0 3px var(--c-blue);
+}
+.fan-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 520px) {
+  .fan-card {
+    width: 96px;
+    height: 128px;
+  }
+}

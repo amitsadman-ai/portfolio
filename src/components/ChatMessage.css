@@ -1,0 +1,153 @@
+/* ==============================================
+   Chat message — a single bubble that types itself in
+   ============================================== */
+.chat-msg {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  /* Reserve height while a row is still 'hidden' so the pending rows below
+     the fold don't all sit inside the first viewport (and all fire their
+     typing at once). Each row holds ~a bubble's worth of space. */
+  min-height: 46px;
+}
+.chat-msg--them {
+  justify-content: flex-start;
+}
+.chat-msg--me {
+  justify-content: flex-end;
+}
+
+.chat-msg__slot {
+  max-width: 80%;
+  display: flex;
+}
+.chat-msg--me .chat-msg__slot {
+  justify-content: flex-end;
+}
+
+/* a message that carries a "behind" layer (the dream deck) needs a
+   positioning context, and its bubble must sit above that layer. The layer
+   itself is click-through except for the cards inside it. */
+.chat-msg--haslayer .chat-msg__slot {
+  position: relative;
+}
+.chat-msg--haslayer .chat-msg__bubble {
+  position: relative;
+  z-index: 5;
+}
+.chat-msg__behind {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------- avatar (Amit's replies only) ---------- */
+.chat-msg__avatar {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 6px rgba(45, 51, 89, 0.18);
+}
+
+/* ---------- bubble ---------- */
+.chat-msg__bubble {
+  padding: 11px 16px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--chat-text, var(--c-text));
+  overflow-wrap: anywhere;
+  box-shadow: 0 6px 16px rgba(45, 51, 89, 0.06);
+  animation: msg-pop 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.chat-msg--them .chat-msg__bubble {
+  background: var(--chat-them-bg, #fff);
+  border: 1px solid var(--chat-them-border, var(--c-primary-line));
+  color: var(--chat-them-text, var(--c-text));
+  border-bottom-left-radius: 6px;
+}
+.chat-msg--me .chat-msg__bubble {
+  background: var(--chat-me-bg, #dcebfb);
+  color: var(--chat-me-text, var(--c-text));
+  border-bottom-right-radius: 6px;
+}
+.chat-msg__bubble p {
+  margin: 0;
+}
+.chat-msg__bubble p + p {
+  margin-top: 8px;
+}
+
+@keyframes msg-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- typing indicator ---------- */
+.chat-msg__typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  animation: msg-pop 0.24s ease-out both;
+}
+.chat-msg--them .chat-msg__typing {
+  background: var(--chat-them-bg, #fff);
+  border: 1px solid var(--chat-them-border, var(--c-primary-line));
+  color: var(--chat-them-text, var(--c-text));
+  border-bottom-left-radius: 6px;
+}
+.chat-msg--me .chat-msg__typing {
+  background: var(--chat-me-bg, #dcebfb);
+  color: var(--chat-me-text, var(--c-text));
+  border-bottom-right-radius: 6px;
+}
+.chat-msg__typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+.chat-msg__typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.chat-msg__typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typing-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-msg__bubble,
+  .chat-msg__typing {
+    animation: none;
+  }
+  .chat-msg__typing span {
+    animation: none;
+  }
+}

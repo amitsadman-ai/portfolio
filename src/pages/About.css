@@ -1,294 +1,277 @@
 /* ==============================================
-   About page
+   About page — a little chat about Amit
    ============================================== */
 .about {
-  padding: clamp(40px, 8vh, 80px) 0 clamp(48px, 8vw, 96px);
+  padding: clamp(32px, 7vh, 72px) 0 clamp(56px, 9vw, 104px);
 }
 
-/* hide the global dotted background pattern while the About page is rendered
-   (the dots show on every other page, just not here) */
-body:has(.about) .bg-layer::after {
-  display: none;
+/* ---------- page title + subtitle ---------- */
+.about__lead {
+  max-width: 880px;
+  margin: 0 auto clamp(22px, 3.5vw, 40px);
+  text-align: left;
 }
-
-/* ---------- Hero: photo + intro ---------- */
-.about__hero {
-  display: grid;
-  grid-template-columns: clamp(240px, 22vw, 320px) 1fr;
-  grid-template-rows: auto 1fr;
-  gap: clamp(28px, 5vw, 0px);
-  /* center the photo vertically with the text instead of sticking to the
-     top — keeps the face roughly at the level of the title and body */
-  align-items: center;
-  margin: 0 10px clamp(56px, 8vw, 96px) -10px;
-}
-.about__hero .about__title {
-  /* title spans both columns so it aligns left with "Experience" below */
-  grid-column: 1 / -1;
-  margin: 0 0 clamp(16px, 2.5vw, 28px);
-}
-
-.about__photo {
-  position: relative;
-  isolation: isolate;
-}
-.about__photo-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-  position: relative;
-  z-index: 1;
-  transform: translateX(-30px) translateY(-20px);
-}
-
-
-
-.about__intro {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.about__title {
+.about__lead-title {
   font-family: var(--font-headline);
-  font-size: clamp(36px, 5vw, 56px);
+  font-size: clamp(34px, 5vw, 54px);
   font-weight: 400;
   color: var(--c-primary);
-  line-height: 1.1;
-  margin: 0 0 8px;
-}
-.about__text {
-  font-size: clamp(16px, 1.3vw, 18px);
-  line-height: 1.6;
-  color: var(--c-text);
-  margin: 0;
-}
-.about__goals {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.about__goal {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: 'Oooh Baby', cursive;
-  font-size: clamp(22px, 2vw, 28px);
-  line-height: 1.4;
-  color: var(--c-text);
-}
-.about__goal-icon {
-  flex: 0 0 28px;
-  font-family: system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
-  font-size: 24px;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Fun-fact pill lives in the About intro — align it to the left edge of
-   the text column instead of centered. */
-.about__intro .funfact {
-  align-items: flex-start;
-  position: relative;
-  margin-top: 24px;
-}
-/* On desktop the photo is vertically centered against this text column, so
-   revealing the answer would grow the column and nudge the photo down. Float
-   the answer as an overlay instead, so the layout height stays fixed and the
-   photo doesn't move when the CTA is clicked. (On mobile the photo sits above
-   the text, so an in-flow answer causes no shift — leave it in flow there.) */
-@media (min-width: 821px) {
-  .about__intro .funfact__answer {
-    position: absolute;
-    top: calc(100% + 12px);
-    inset-inline-start: 0;
-    margin: 0;
-    white-space: nowrap;
-  }
-}
-
-/* ---------- Experience ---------- */
-.about__experience {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.about__section-title {
-  font-family: var(--font-headline);
-  font-size: clamp(28px, 3.5vw, 44px);
-  font-weight: 400;
-  color: var(--c-primary);
-  line-height: 1.1;
+  line-height: 1.08;
   margin: 0 0 12px;
 }
-
-.about__exp-list {
-  list-style: none;
+.about__lead-sub {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 300;
+  color: rgba(45, 51, 89, 0.72);
+  line-height: 1.6;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(28px, 4vw, 48px);
-}
-.about__exp-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: clamp(28px, 4vw, 48px);
-  border-bottom: 1px solid var(--c-primary-line);
-}
-.about__exp-item:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
 }
 
-.about__exp-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.about__exp-company-block {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.about__exp-company {
-  font-family: var(--font-headline);
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 400;
-  color: var(--c-primary);
-  margin: 0;
-  line-height: 1.2;
-}
-.about__exp-location {
-  font-size: 14px;
-  color: var(--c-text);
-  opacity: 0.7;
-  margin: 0;
-}
-.about__exp-dates {
-  font-size: 14px;
-  color: var(--c-text);
-  opacity: 0.7;
-  margin: 0;
-  white-space: nowrap;
-}
-.about__exp-title {
-  font-family: var(--font-script);
-  font-size: clamp(22px, 2vw, 28px);
-  font-weight: 400;
-  line-height: 1.1;
-  color: var(--c-primary);
-  margin: 4px 0 6px;
-}
-.about__exp-bullets {
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  color: var(--c-text);
-  font-size: clamp(15px, 1.2vw, 17px);
-  line-height: 1.55;
-}
-.about__exp-bullets li {
-  position: relative;
-  padding-left: 20px;
-}
-.about__exp-bullets li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #fff5c1;
-}
+/* ---------- the chat "window" + its palette variables ---------- */
+.about__chat {
+  --chat-window-bg: #eef1f6;
+  --chat-header-bg: #ffffff;
+  --chat-border: var(--c-primary-line);
+  --chat-text: var(--c-text);
+  --chat-muted: rgba(23, 26, 45, 0.5);
+  --chat-name: var(--c-text);
+  --chat-them-bg: #ffffff;
+  --chat-them-border: var(--c-primary-line);
+  --chat-them-text: var(--c-text);
+  --chat-me-bg: #dcebfb;
+  --chat-me-text: var(--c-text);
+  --chat-composer-bg: #ffffff;
+  --chat-input-bg: #eef1f6;
+  --chat-send-bg: var(--c-primary);
+  --chat-send-color: #ffffff;
+  --chat-accent: var(--c-yellow);
+  --chat-shadow: 0 30px 80px rgba(45, 51, 89, 0.16);
 
-/* ---------- Skills marquee ---------- */
-.about__skills {
-  margin-top: clamp(64px, 7vw, 100px);
-}
-.about__skills-title {
-  font-family: var(--font-headline);
-  font-size: clamp(24px, 2.6vw, 34px);
-  font-weight: 400;
-  color: var(--c-primary);
-  line-height: 1.2;
-  margin: 0 0 clamp(20px, 2.5vw, 32px);
-  text-align: center;
-}
-/* the marquee container — breaks out of .container so the pill row
-   spans edge-to-edge, with overflow:hidden + edge fade mask */
-.about__skills-marquee {
-  margin-left: calc(-1 * clamp(20px, 4vw, 80px));
-  margin-right: calc(-1 * clamp(20px, 4vw, 80px));
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--chat-window-bg);
+  border: 1px solid var(--chat-border);
+  border-radius: 28px;
+  box-shadow: var(--chat-shadow);
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 8%,
-    #000 92%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 8%,
-    #000 92%,
-    transparent 100%
-  );
-}
-.about__skills-track {
   display: flex;
+  flex-direction: column;
+}
+
+/* ---------- messaging-app header bar ---------- */
+.about__chat-header {
+  display: flex;
+  align-items: center;
   gap: 12px;
-  width: max-content;
-  animation: about-skills-scroll 38s linear infinite;
+  padding: 16px clamp(16px, 3vw, 24px);
+  background: var(--chat-header-bg);
+  border-bottom: 1px solid var(--chat-border);
 }
-@keyframes about-skills-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.about__skill {
+.about__chat-avatar-wrap {
+  position: relative;
   flex: 0 0 auto;
-  padding: 8px 22px;
-  border-radius: 999px;
-  background: #fcf9e7;
-  color: var(--c-primary);
-  font-family: var(--font-script);
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 400;
-  line-height: 1.2;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(45, 51, 89, 0.06);
+}
+.about__chat-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  box-shadow: 0 3px 10px rgba(45, 51, 89, 0.18);
+}
+.about__chat-dot {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  /* glossy, lit LED: bright highlight top-left fading to a deeper green */
+  background: radial-gradient(
+    circle at 34% 30%,
+    #9bf3ad 0%,
+    #34d15b 52%,
+    #1fa243 100%
+  );
+  box-shadow: 0 0 6px 1px rgba(45, 199, 90, 0.75), 0 1px 2px rgba(0, 0, 0, 0.2);
+  /* gently "breathes" so it reads as a live status light */
+  animation: chat-dot-glow 2.4s ease-in-out infinite;
+}
+@keyframes chat-dot-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 4px 1px rgba(45, 199, 90, 0.55), 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 12px 3px rgba(45, 199, 90, 0.95),
+      0 1px 2px rgba(0, 0, 0, 0.2);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .about__skills-track {
+  .about__chat-dot {
     animation: none;
   }
 }
+.about__chat-meta {
+  min-width: 0;
+}
+.about__chat-name {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--chat-name);
+  line-height: 1.2;
+}
+.about__chat-status {
+  margin: 3px 0 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--chat-muted);
+  line-height: 1.2;
+}
 
-/* ---------- Responsive ---------- */
-@media (max-width: 820px) {
-  .about__hero {
-    grid-template-columns: 1fr;
+/* ---------- conversation surface ---------- */
+.about__body {
+  padding: clamp(20px, 3vw, 30px) clamp(16px, 3vw, 24px);
+}
+
+.about__thread {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* three dreams — one per line, bulleted */
+.about__dream-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.about__dream-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.about__dream-list li::before {
+  content: '•';
+  position: absolute;
+  left: 4px;
+  top: -0.02em;
+  color: var(--c-yellow);
+}
+/* little nudge that the peeking deck is interactive */
+.about__dream-hint {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: currentColor;
+  opacity: 0.6;
+}
+
+/* sloth "fun fact" — divided from the answer above by a hairline, no bg */
+.about__funfact {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(23, 26, 45, 0.14);
+  color: rgba(23, 26, 45, 0.72);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.about__funfact-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fff5c1;
+  color: var(--c-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.about__funfact-tag::before {
+  content: '💡';
+  font-size: 12px;
+}
+
+/* ---------- composer — Amit's answers type here, then send up ---------- */
+.about__composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px clamp(14px, 2.5vw, 18px);
+  background: var(--chat-composer-bg);
+  border-top: 1px solid var(--chat-border);
+}
+.about__composer-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: var(--chat-input-bg);
+  border: 1px solid var(--chat-border);
+  color: var(--chat-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  /* grow with the message as it's typed */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.about__composer-input.is-typing {
+  color: var(--chat-text);
+}
+.about__composer-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: -2px;
+  background: var(--chat-text);
+  animation: composer-caret 0.9s step-end infinite;
+}
+@keyframes composer-caret {
+  50% {
+    opacity: 0;
   }
-  .about__photo {
-    position: static;
-    max-width: 320px;
-    margin: 0 auto;
+}
+.about__composer-send {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--chat-send-bg);
+  color: var(--chat-send-color);
+  display: grid;
+  place-items: center;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.about__composer-send.is-armed {
+  box-shadow: 0 4px 16px rgba(45, 51, 89, 0.4);
+  transform: scale(1.05);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 640px) {
+  .about__themebar {
+    justify-content: center;
+  }
+  .about__chat {
+    max-width: 100%;
+    border-radius: 22px;
+  }
+  .about__chat-avatar {
+    width: 44px;
+    height: 44px;
   }
 }
