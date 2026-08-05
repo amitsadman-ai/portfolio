@@ -153,6 +153,7 @@ export default function About() {
   const [composerText, setComposerText] = useState('')
   const [typing, setTyping] = useState(false)
   const composerRef = useRef(null)
+  const bodyRef = useRef(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -217,10 +218,12 @@ export default function About() {
     }
   }, [])
 
-  // keep the composer (and the newest message) in view as the chat plays
+  // the chat is a fixed-height panel at every width, so keep the newest
+  // message in view by scrolling the thread INSIDE it as the chat plays
   useEffect(() => {
     if (sentCount === 0 && pendingThem === null) return
-    composerRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' })
+    const body = bodyRef.current
+    if (body) body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' })
   }, [sentCount, pendingThem, typing])
 
   return (
@@ -252,7 +255,7 @@ export default function About() {
           </header>
 
           {/* the conversation surface */}
-          <div className="about__body">
+          <div className="about__body" ref={bodyRef}>
             <div className="about__thread">
               {MESSAGES.slice(0, sentCount).map((m, i) => (
                 <ChatMessage

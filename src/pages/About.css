@@ -2,13 +2,30 @@
    About page — a little chat about Amit
    ============================================== */
 .about {
-  padding: clamp(32px, 7vh, 72px) 0 clamp(56px, 9vw, 104px);
+  /* an app-like panel: the section fills the viewport below the header and
+     the chat fills whatever's left under the title, so the panel stays put
+     and the messages scroll INSIDE it (desktop + mobile alike) */
+  height: calc(100vh - var(--header-h));
+  height: calc(100dvh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 4vh, 44px) 0 clamp(20px, 3vh, 40px);
+}
+.about > .container {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ---------- page title + subtitle ---------- */
 .about__lead {
+  flex: 0 0 auto;
+  width: 100%;
   max-width: 880px;
-  margin: 0 auto clamp(22px, 3.5vw, 40px);
+  margin: 0 0 clamp(16px, 2.5vw, 28px);
   text-align: left;
 }
 .about__lead-title {
@@ -22,8 +39,8 @@
 .about__lead-sub {
   font-family: var(--font-body);
   font-size: clamp(15px, 1.4vw, 18px);
-  font-weight: 300;
-  color: rgba(45, 51, 89, 0.72);
+  font-weight: 400;
+  color: #171a2d;
   line-height: 1.6;
   margin: 0;
 }
@@ -48,8 +65,10 @@
   --chat-accent: var(--c-yellow);
   --chat-shadow: 0 30px 80px rgba(45, 51, 89, 0.16);
 
+  width: 100%;
   max-width: 880px;
-  margin: 0 auto;
+  flex: 1 1 auto;
+  min-height: 0;
   background: var(--chat-window-bg);
   border: 1px solid var(--chat-border);
   border-radius: 28px;
@@ -136,6 +155,13 @@
 
 /* ---------- conversation surface ---------- */
 .about__body {
+  /* the scrollable middle of the chat: fills the space between the header
+     and composer and scrolls internally as the conversation plays */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: clamp(20px, 3vw, 30px) clamp(16px, 3vw, 24px);
 }
 
@@ -224,9 +250,11 @@
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.45;
-  /* grow with the message as it's typed */
+  /* grow with the message as it's typed, up to a few lines then scroll */
   white-space: normal;
   overflow-wrap: anywhere;
+  max-height: 108px;
+  overflow-y: auto;
 }
 .about__composer-input.is-typing {
   color: var(--chat-text);
@@ -263,11 +291,14 @@
 
 /* ---------- responsive ---------- */
 @media (max-width: 640px) {
-  .about__themebar {
-    justify-content: center;
+  .about {
+    padding-top: clamp(14px, 3vh, 24px);
+    padding-bottom: 12px;
+  }
+  .about__lead {
+    margin-bottom: 14px;
   }
   .about__chat {
-    max-width: 100%;
     border-radius: 22px;
   }
   .about__chat-avatar {
