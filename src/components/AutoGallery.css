@@ -88,6 +88,40 @@ body.lightbox-open .gallery__track {
   }
 }
 
+/* static mode — no auto-scroll; the exact set (no duplicates) shown once,
+   contained within the content column. Every screen fits in one row (none cut
+   off): items share the width equally and images scale to fit. */
+.gallery--static {
+  /* full-bleed: use the whole screen width (out past the text column) so every
+     screen can be shown at once, big, with no scroll */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: visible;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.gallery--static .gallery__track {
+  animation: none;
+  width: 100%;
+  gap: clamp(10px, 1.4vw, 20px);
+  align-items: flex-start;
+}
+.gallery--static .gallery__item {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-right: 0;
+}
+.gallery--static .gallery__btn {
+  width: 100%;
+}
+/* each screen scales to its share of the full width, kept whole (never cropped) */
+.gallery--static .gallery__btn img {
+  width: 100%;
+  height: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gallery {
     overflow-x: auto;

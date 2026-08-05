@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Users, Tent, Banknote } from 'lucide-react'
 import { getProject, projects } from '../data/projects'
 import { LogoPlaceholder } from '../components/Placeholder'
 import AppFixes from '../components/AppFixes'
+import CountUp from '../components/CountUp'
 import Reveal from '../components/Reveal'
 import AutoGallery from '../components/AutoGallery'
 import PhoneScene from '../components/PhoneScene'
@@ -17,6 +18,8 @@ import './CaseStudy.css'
 /* Crossfade slideshow: cycles through `images` every 3s, stacking them so
  * the next image fades in over the current one. Pauses while the tab is
  * hidden to avoid wasted timer cycles. */
+const STAT_ICONS = { users: Users, tent: Tent, money: Banknote }
+
 function AutoCycle({ images, alt = '', className = '' }) {
   const [idx, setIdx] = useState(0)
   useEffect(() => {
@@ -71,7 +74,7 @@ export default function CaseStudy() {
     )
   }
 
-  const { tag, title, body, logos, csBody, csTagline, apps, problem, problemLabel, today, todayLabel, todayCaption, todayDesktop, todayDesktopCaption, research, solution, solutionLabel, solutionImage, solutionImageAlt, questionnaire, gallery, evolution, newScreens, screensLabel, reflection, banner, bannerShift: projectBannerShift, bannerAspect: projectBannerAspect, bannerFit: projectBannerFit, bannerOffsetY: projectBannerOffsetY, extraSections } = project
+  const { tag, title, body, logos, csBody, csTagline, apps, problem, problemLabel, stats, statsLabel, today, todayLabel, todayCaption, todayDesktop, todayDesktopCaption, research, solution, solutionLabel, solutionImage, solutionImageAlt, questionnaire, gallery, evolution, newScreens, screensLabel, reflection, banner, bannerShift: projectBannerShift, bannerAspect: projectBannerAspect, bannerFit: projectBannerFit, bannerOffsetY: projectBannerOffsetY, extraSections } = project
   const screensLabelText = screensLabel || 'New screens'
   const paragraphs = csBody || [body]
   // Per-app banner falls back to the project-level banner (for non-apps case studies)
@@ -205,6 +208,50 @@ export default function CaseStudy() {
               ) : (
                 <p className="app__text">{problem}</p>
               )}
+            </Reveal>
+          )}
+          {!apps && stats && stats.length > 0 && (
+            <Reveal className="app__block">
+              <span className="app__label">{statsLabel || 'By the numbers'}</span>
+              <div className="cs__stats">
+                {stats.map((s, i) => {
+                  const Icon = STAT_ICONS[s.icon] || STAT_ICONS.users
+                  return (
+                    <div
+                      key={i}
+                      className={`cs__stat cs__stat--${s.accent || 'blue'}`}
+                    >
+                      <div className="cs__stat-media">
+                        {s.image ? (
+                          <img
+                            className="cs__stat-img"
+                            src={s.image}
+                            alt=""
+                            aria-hidden="true"
+                            loading="lazy"
+                            style={
+                              s.imgSize
+                                ? { width: s.imgSize, height: s.imgSize }
+                                : undefined
+                            }
+                          />
+                        ) : (
+                          <span className="cs__stat-icon" aria-hidden="true">
+                            <Icon size={26} strokeWidth={1.75} />
+                          </span>
+                        )}
+                      </div>
+                      <CountUp
+                        className="cs__stat-num"
+                        value={s.value}
+                        prefix={s.prefix}
+                        suffix={s.suffix}
+                      />
+                      <p className="cs__stat-label">{s.label}</p>
+                    </div>
+                  )
+                })}
+              </div>
             </Reveal>
           )}
           {!apps && today && (

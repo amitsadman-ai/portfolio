@@ -44,7 +44,7 @@ function BulletList({ items, nested = false }) {
 }
 
 export default function AppSection({ app, onExpand }) {
-  const { name, title, subtitle, problem, today, solution, gallery, cta, flowName, flow2Name, flow2Image } = app
+  const { name, title, subtitle, problem, today, solution, feedback, feedbackLabel, gallery, galleryStatic, cta, flowName, flow2Name, flow2Image } = app
 
   return (
     <article className="app">
@@ -94,6 +94,38 @@ export default function AppSection({ app, onExpand }) {
                     <li key={k}>{b}</li>
                   ))}
                 </ul>
+              )
+            }
+            // an object with { heading } becomes a small sub-heading
+            if (typeof p === 'object' && p !== null && p.heading) {
+              return (
+                <h3 key={i} className="app__subheading">
+                  {p.heading}
+                </h3>
+              )
+            }
+            // an object with { images } becomes a scrollable row of
+            // screenshots (each opens the lightbox with prev/next)
+            if (typeof p === 'object' && p !== null && Array.isArray(p.images)) {
+              return (
+                <div key={i} className="app__today app__evidence">
+                  {p.images.map((src, k) => (
+                    <button
+                      key={k}
+                      type="button"
+                      className="app__today-btn"
+                      onClick={() => onExpand?.(p.images, k)}
+                      aria-label={`Expand ${name} — conversation screenshot ${k + 1}`}
+                    >
+                      <img
+                        className="app__today-img"
+                        src={src}
+                        alt={`${name} transfer confusion — conversation screenshot ${k + 1}`}
+                        loading="lazy"
+                      />
+                    </button>
+                  ))}
+                </div>
               )
             }
             return (
@@ -153,6 +185,45 @@ export default function AppSection({ app, onExpand }) {
         )}
       </Reveal>
 
+      {feedback && feedback.length > 0 && (
+        <Reveal className="app__block">
+          <span className="app__label">
+            {feedbackLabel || 'What real users actually think'}
+          </span>
+          {/* running gallery — duplicate the set so translateX(-50%) loops seamlessly */}
+          <div className="app__feedback" role="group" aria-label={`${name} user comments`}>
+            <ul
+              className="app__feedback-track"
+              style={{ animationDuration: `${Math.max(70, feedback.length * 12)}s` }}
+            >
+              {[...feedback, ...feedback].map((src, i) => {
+                const clone = i >= feedback.length
+                const idx = i % feedback.length
+                return (
+                  <li key={i} className="app__feedback-item" aria-hidden={clone ? 'true' : undefined}>
+                    <button
+                      type="button"
+                      className="app__feedback-btn"
+                      onClick={() => onExpand?.(feedback, idx)}
+                      tabIndex={clone ? -1 : 0}
+                      aria-label={`Expand comment ${idx + 1}`}
+                    >
+                      <img
+                        className="app__feedback-img"
+                        src={src}
+                        alt={clone ? '' : `${name} — user comment ${idx + 1}`}
+                        loading="lazy"
+                        draggable="false"
+                      />
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </Reveal>
+      )}
+
       <Reveal className="app__block">
         <span className="app__label">New screens</span>
         {flowName && <p className="app__flow-name">{flowName}</p>}
@@ -162,7 +233,7 @@ export default function AppSection({ app, onExpand }) {
             <ArrowRight size={18} />
           </a>
         )}
-        <AutoGallery images={gallery} onExpand={onExpand} label={`${name} new screens`} />
+        <AutoGallery images={gallery} onExpand={onExpand} label={`${name} new screens`} static={galleryStatic} />
 
         {flow2Name && flow2Image && (
           <div className="app__flow2">
